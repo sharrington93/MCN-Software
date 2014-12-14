@@ -19,6 +19,8 @@ void BUS_OFF();
 //           DEFINE mailboxes for all output except heartbeat and command
 //			 Mailboxes and ID's 0 or 1 are reserved for system use.
 
+#define COMMAND_ID 		0x1
+#define HEARTBEAT_ID 	0x0
 
 #define COOLANT_FLOW_ID 		0x3E2
 #define COOLANT_FLOW_BOX 		2
