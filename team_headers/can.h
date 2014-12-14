@@ -18,6 +18,10 @@ void BUS_OFF();
 //todo USER: DEFINE IDs for all output
 //           DEFINE mailboxes for all output except heartbeat and command
 //			 Mailboxes and ID's 0 or 1 are reserved for system use.
+
+#define COMMAND_ID 		0x1
+#define HEARTBEAT_ID 	0x0
+
 #define ADC_ID 			0x2
 #define ADC_BOX 		2
 #define ADC_TRS			TRS2

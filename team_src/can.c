@@ -21,8 +21,8 @@ void CANSetup()
 
 	EALLOW;
 	//MBOX 0 - 1
-	CommandBoxInit();   // Mbox 0
-	HeartbeatBoxInit(); // Mbox 1
+	CommandBoxInit(COMMAND_ID);   // Mbox 0
+	HeartbeatBoxInit(HEARTBEAT_ID); // Mbox 1
 	/*
 	* todo USER: Node specifc CAN setup
 	* create mailbox for all Receive and transmit IDs
