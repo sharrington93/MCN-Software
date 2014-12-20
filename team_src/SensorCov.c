@@ -51,8 +51,7 @@ void SensorCovInit()
 {
 	//todo USER: SensorCovInit()
 	SystemSensorInit();
-
-	//Setup_GPIO_Input(CAN_Freq, pin, isPullUp)
+	ConfigGPIOSensor(10, 10000, 26, 0, 3);
 
 }
 
