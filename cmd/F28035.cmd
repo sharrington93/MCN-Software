@@ -115,7 +115,7 @@ SECTIONS
 {
 
    /* Allocate program areas: */
-   .cinit              : > FLASHC      PAGE = 0
+   .cinit              : > FLASHG      PAGE = 0
    .pinit              : > FLASHC,     PAGE = 0
    .text               : > FLASHC      PAGE = 0
 

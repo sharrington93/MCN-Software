@@ -45,8 +45,7 @@ void SensorCovInit()
 {
 	//todo USER: SensorCovInit()
 	SystemSensorInit();
-
-	//adc_cal_watch = StartStopWatch(100); //Half a second?
+	ConfigGPIOSensor(10, 10000, 26, 0, 3);
 }
 
 
@@ -58,7 +57,9 @@ void SensorCovMeasure()
 	//update data_temp and ops_temp
 	//use stopwatch to catch timeouts
 	//waiting should poll isStopWatchComplete() to catch timeout and throw StopWatchError
+
 	data_temp.adc = A0RESULT;
+
 	data_temp.gp_button = READGPBUTTON();
 
 	if (data_temp.gp_button == 0) 			//if pushed cause stopwatch
