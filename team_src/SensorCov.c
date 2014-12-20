@@ -12,6 +12,7 @@ extern DSPfilter A1filter;
 extern DSPfilter A3filter;
 extern DSPfilter A4filter;
 extern DSPfilter A5filter;
+extern DSPfilter GPIO26filter;
 
 user_ops_struct ops_temp;
 user_data_struct data_temp;
@@ -65,11 +66,11 @@ void SensorCovMeasure()
 	//use stopwatch to catch timeouts
 	//waiting should poll isStopWatchComplete() to catch timeout and throw StopWatchError
 
-	//data_temp.coolant_flow = A1RESULT; FIX ME
+	data_temp.coolant_flow = GPIO26RESULT;
 	data_temp.motor_coolant_temp = A4RESULT;
 	data_temp.motor_control_coolant_temp = A5RESULT;
 	data_temp.radiator_coolant_temp = A0RESULT;
-	data_temp.coolant_pressure_1 = A7RESULT;
+	//data_temp.coolant_pressure_1 = A7RESULT;
 	data_temp.coolant_pressure_2 = A3RESULT;
 
 	data_temp.gp_button = READGPBUTTON();
