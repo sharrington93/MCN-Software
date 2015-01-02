@@ -17,22 +17,7 @@ extern DSPfilter GPIO26filter;
 user_ops_struct ops_temp;
 user_data_struct data_temp;
 
-Uint16 SOC0CHSEL;
-Uint16 SOC1CHSEL;
-Uint16 SOC2CHSEL;
-Uint16 SOC3CHSEL;
-Uint16 SOC4CHSEL;
-Uint16 SOC5CHSEL;
-Uint16 SOC6CHSEL;
-Uint16 SOC7CHSEL;
-Uint16 SOC8CHSEL;
-Uint16 SOC9CHSEL;
-Uint16 SOC10CHSEL;
-Uint16 SOC11CHSEL;
-Uint16 SOC12CHSEL;
-Uint16 SOC13CHSEL;
-Uint16 SOC14CHSEL;
-Uint16 SOC15CHSEL;
+Uint32 temp = 0;
 
 void SensorCov()
 {
@@ -51,8 +36,7 @@ void SensorCovInit()
 {
 	//todo USER: SensorCovInit()
 	SystemSensorInit();
-	ConfigGPIOSensor(10, 10000, 26, 0, 3);
-
+	ConfigGPIOSensor(410, 10000, 26, 0, 2);
 }
 
 
@@ -65,7 +49,8 @@ void SensorCovMeasure()
 	//use stopwatch to catch timeouts
 	//waiting should poll isStopWatchComplete() to catch timeout and throw StopWatchError
 
-	data_temp.coolant_flow = GPIO26RESULT;
+	data_temp.coolant_flow = GPIO26filter.filtered_value;
+	//data_temp.coolant_flow = GPIO26RESULT;
 	data_temp.motor_coolant_temp = A4RESULT;
 	data_temp.motor_control_coolant_temp = A5RESULT;
 	data_temp.radiator_coolant_temp = A0RESULT;

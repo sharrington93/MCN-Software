@@ -133,7 +133,7 @@ SECTIONS
 
    /* Allocate uninitalized data sections: */
    .stack              : > RAMM0       PAGE = 1
-   .ebss               : > RAML2       PAGE = 1
+   .ebss               : >> RAML2 | RAMM1       PAGE = 1
    .bss                : > RAML2       PAGE = 1
    .sysmem             : > RAML3       PAGE = 1
 
