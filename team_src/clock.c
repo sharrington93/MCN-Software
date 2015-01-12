@@ -11,8 +11,8 @@ clock_struct Clock_Ticks = CLOCK_TICKS_CLEAR;
 
 void ClockSetup()
 {
-	SystemClockSetup(&Clock_Ticks);
-	InitializeCpuTimer2(500000);
+	SystemClockSetup();
+	InitializeCpuTimer2(CLOCK_PERIOD);
 	StartCpuTimer2();
 }
 
@@ -46,8 +46,14 @@ __interrupt void INT14_ISR(void)     // INT14 or CPU-Timer2
 	if (Clock_Ticks.DataOut >= DATAOUT_TICKS)
 	{
 		//send data or fill data
-		SendCAN(ADC_BOX);
-		SendCAN(GP_BUTTON_BOX);
+		SendCAN(COOLANT_FLOW_BOX);
+		SendCAN(MOTOR_TEMP_BOX);
+		SendCAN(MOTOR_CONT_TEMP_BOX);
+		SendCAN(RADIATOR_TEMP_BOX);
+		SendCAN(COOLANT_PRESSURES_BOX);
+		SendCAN(MOTOR_PLATE_TEMP_BOX);
+		SendCAN(AMBIENT_TEMP_BOX);
+		SendCAN(EMRAX_TEMP_BOX);
 		Clock_Ticks.DataOut = 0;
 	}
 
