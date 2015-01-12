@@ -115,9 +115,9 @@ SECTIONS
 {
 
    /* Allocate program areas: */
-   .cinit              : > FLASHC      PAGE = 0
-   .pinit              : > FLASHC,     PAGE = 0
-   .text               : > FLASHC      PAGE = 0
+   .cinit              : > FLASHG      			PAGE = 0
+   .pinit              : > FLASHC,     			PAGE = 0
+   .text               : >> FLASHC | FLASHD   	PAGE = 0
 
 
    codestart           : > BEGIN       PAGE = 0
@@ -133,7 +133,7 @@ SECTIONS
 
    /* Allocate uninitalized data sections: */
    .stack              : > RAMM0       PAGE = 1
-   .ebss               : > RAML2       PAGE = 1
+   .ebss               : >> RAML2 | RAMM1       PAGE = 1
    .bss                : > RAML2       PAGE = 1
    .sysmem             : > RAML3       PAGE = 1
 
@@ -147,7 +147,7 @@ SECTIONS
    /* Initalized sections go in Flash */
    /* For SDFlash to program these, they must be allocated to page 0 */
    .econst             : > FLASHC      PAGE = 0
-   .switch             : > FLASHC      PAGE = 0
+   .switch             : > FLASHD      PAGE = 0
 
    /* Allocate IQ math areas: */
    IQmath              : > FLASHC      PAGE = 0            /* Math Code */
