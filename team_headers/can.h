@@ -19,41 +19,36 @@ void BUS_OFF();
 //           DEFINE mailboxes for all output except heartbeat and command
 //			 Mailboxes and ID's 0 or 1 are reserved for system use.
 
-#define COMMAND_ID 		0x3E8
-#define HEARTBEAT_ID 	0x3E7
+#define COMMAND_ID 					0xD0
+#define HEARTBEAT_ID 				0xCF
 
-#define COOLANT_FLOW_ID 		0x3E2
-#define COOLANT_FLOW_BOX 		2
-#define COOLANT_FLOX_TRS 		TRS2
+#define FRONT_SUSPENSION_ID 		0xC8
+#define FRONT_SUSPENSION_BOX 		2
+#define FRONT_SUSPENSION_TRS 		TRS2
 
-#define MOTOR_TEMP_ID			0x3E3
-#define MOTOR_TEMP_BOX			3
-#define MOTOR_TEMP_TRS			TRS3
+#define STEERING_ID					0xC9
+#define STEERING_BOX				3
+#define STEERING_TRS				TRS3
 
-#define MOTOR_CONT_TEMP_ID		0x3E4
-#define MOTOR_CONT_TEMP_BOX		4
-#define MOTOR_CONT_TEMP_TRS		TRS4
+#define FRONT_WHEEL_ID				0xCA
+#define FRONT_WHEEL_BOX				4
+#define FRONT_WHEEL_TRS				TRS4
 
-#define RADIATOR_TEMP_ID		0x3E5
-#define RADIATOR_TEMP_BOX		5
-#define RADIATOR_TEMP_TRS		TRS5
+#define FRONT_BRAKE_ID				0xCB
+#define FRONT_BRAKE_BOX				5
+#define FRONT_BRAKE_TRS				TRS5
 
-#define COOLANT_PRESSURES_ID		0x3E6
-#define COOLANT_PRESSURES_BOX	6
-#define COOLANT_PRESSURES_TRS	TRS6
+//#define FRONT_ID		0xCC
+//#define COOLANT_PRESSURES_BOX		6
+//#define COOLANT_PRESSURES_TRS		TRS6
 
-#define EMRAX_TEMP_ID			0x3DF
-#define EMRAX_TEMP_BOX			7
-#define EMRAX_TEMP_TRS			TRS7
+#define AMBIENT_ID					0xCD
+#define AMBIENT_BOX					7
+#define AMBIENT_TRS					TRS7
 
-#define AMBIENT_TEMP_ID			0x3E0
-#define AMBIENT_TEMP_BOX		8
-#define AMBIENT_TEMP_TRS		TRS8
-
-#define MOTOR_PLATE_TEMP_ID		0x3E1
-#define MOTOR_PLATE_TEMP_BOX	9
-#define MOTOR_PLATE_TEMP_TRS	TRS9
-
+#define RADIATOR_ID			0xCE
+#define RADIATOR_BOX		8
+#define RADIATOR_TRS		TRS8
 
 
 

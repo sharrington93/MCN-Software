@@ -66,8 +66,8 @@ void SensorCovInit()
 	initDSPfilter(&B5filter, ALPHA_SYS);
 	initDSPfilter(&B6filter, ALPHA_SYS);
 	initDSPfilter(&B7filter, ALPHA_SYS);
-	ConfigGPIOSensor(410, 10000, 26, 0, 2);
-	ConfigGPIOSensor(410, 10000, 19, 0, 2);
+	ConfigGPIOSensor(410, 10000, 26, 0, 2); //Change CAN freq
+	ConfigGPIOSensor(410, 10000, 19, 0, 2); //Change CAN freq
 }
 
 
