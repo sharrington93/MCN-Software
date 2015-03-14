@@ -59,22 +59,22 @@ char FillCAN(unsigned int Mbox)
 		switch (Mbox)
 		{
 		case FRONT_SUSPENSION_BOX:
-			InsertCANMessage(FRONT_SUSPENSION_BOX, 0, user_data.coolant_flow.U32);
+			InsertCANMessage(FRONT_SUSPENSION_BOX, 0, user_data.front_suspension_travel.U32);
 			return 1;
 		case STEERING_BOX:
-			InsertCANMessage(STEERING_BOX, user_data.motor_coolant_temp.U32, user_data.motor_coolant_temp.U32);
+			InsertCANMessage(STEERING_BOX, 0, user_data.steering_angle.U32);
 			return 1;
 		case FRONT_WHEEL_BOX:
-			InsertCANMessage(FRONT_WHEEL_BOX, user_data.motor_control_coolant_temp.U32, user_data.motor_control_coolant_temp.U32);
+			InsertCANMessage(FRONT_WHEEL_BOX, 0, user_data.front_wheel_speed.U32);
 			return 1;
 		case FRONT_BRAKE_BOX:
-			InsertCANMessage(FRONT_BRAKE_BOX, user_data.radiator_coolant_temp.U32, user_data.radiator_coolant_temp.U32);
+			InsertCANMessage(FRONT_BRAKE_BOX, 0, user_data.front_brake_pressure.U32);
 			return 1;
 		case AMBIENT_BOX:
-			InsertCANMessage(AMBIENT_BOX, user_data.coolant_pressure_2.U32, user_data.coolant_pressure_1.U32);
+			InsertCANMessage(AMBIENT_BOX, user_data.ambient_temperature.U32, user_data.ambient_pressure.U32);
 			return 1;
 		case RADIATOR_BOX:
-			InsertCANMessage(RADIATOR_BOX, 0, user_data.motor_temp.U32);
+			InsertCANMessage(RADIATOR_BOX, user_data.radiator_coolant_temp.U32, user_data.radiator_air_pressure.U32);
 			return 1;
 		default:
 			return 0;
