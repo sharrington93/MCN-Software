@@ -1,0 +1,54 @@
+/*
+ * can.h
+ *
+ *  Created on: Nov 13, 2013
+ *      Author: Nathan
+ */
+
+#ifndef CAN_H_
+#define CAN_H_
+
+void CANSetup();
+char FillCAN(unsigned int Mbox);
+void FillCANData();
+void FillSendCAN(unsigned int Mbox);
+void ClearMailBoxes();
+void BUS_OFF();
+
+//todo USER: DEFINE IDs for all output
+//           DEFINE mailboxes for all output except heartbeat and command
+//			 Mailboxes and ID's 0 or 1 are reserved for system use.
+
+#define COMMAND_ID 							0x102
+#define HEARTBEAT_ID 						0x101
+
+#define COOLANT_FLOW_ID 					0xFA
+#define COOLANT_FLOW_BOX 					2
+#define COOLANT_FLOX_TRS 					TRS2
+
+#define POWERTRAIN_COOLANT_TEMP_ID			0xFB
+#define POWERTRAIN_COOLANT_TEMP_BOX			3
+#define POWERTRAIN_COOLANT_TEMP_BOX_TRS		TRS3
+
+#define MOTOR_AIR_PRESSURES_ID				0xFC
+#define MOTOR_AIR_PRESSURES_BOX				4
+#define MOTOR_AIR_PRESSURES_TRS				TRS4
+
+#define MOTOR_PLATE_TEMPS_ID				0xFD
+#define MOTOR_PLATE_TEMPS_BOX				5
+#define MOTOR_PLATE_TEMPS_TRS				TRS5
+
+#define STRAIN_GAUGE_12_ID					0xFE
+#define STRAIN_GAUGE_12_BOX					6
+#define STRAIN_GAUGE_12_TRS					TRS6
+
+#define STRAIN_GAUGE_34_ID					0xFF
+#define STRAIN_GAUGE_34_BOX					6
+#define STRAIN_GAUGE_34_TRS					TRS6
+
+#define STRAIN_GAUGE_56_ID					0x100
+#define STRAIN_GAUGE_56_BOX					6
+#define STRAIN_GAUGE_56_TRS					TRS6
+
+
+#endif /* CAN_H_ */
