@@ -19,42 +19,36 @@ void BUS_OFF();
 //           DEFINE mailboxes for all output except heartbeat and command
 //			 Mailboxes and ID's 0 or 1 are reserved for system use.
 
-#define COMMAND_ID 		0x3E8
-#define HEARTBEAT_ID 	0x3E7
+#define COMMAND_ID 							0x102
+#define HEARTBEAT_ID 						0x101
 
-#define COOLANT_FLOW_ID 		0x3E2
-#define COOLANT_FLOW_BOX 		2
-#define COOLANT_FLOX_TRS 		TRS2
+#define COOLANT_FLOW_ID 					0xFA
+#define COOLANT_FLOW_BOX 					2
+#define COOLANT_FLOX_TRS 					TRS2
 
-#define MOTOR_TEMP_ID			0x3E3
-#define MOTOR_TEMP_BOX			3
-#define MOTOR_TEMP_TRS			TRS3
+#define POWERTRAIN_COOLANT_TEMP_ID			0xFB
+#define POWERTRAIN_COOLANT_TEMP_BOX			3
+#define POWERTRAIN_COOLANT_TEMP_BOX_TRS		TRS3
 
-#define MOTOR_CONT_TEMP_ID		0x3E4
-#define MOTOR_CONT_TEMP_BOX		4
-#define MOTOR_CONT_TEMP_TRS		TRS4
+#define MOTOR_AIR_PRESSURES_ID				0xFC
+#define MOTOR_AIR_PRESSURES_BOX				4
+#define MOTOR_AIR_PRESSURES_TRS				TRS4
 
-#define RADIATOR_TEMP_ID		0x3E5
-#define RADIATOR_TEMP_BOX		5
-#define RADIATOR_TEMP_TRS		TRS5
+#define MOTOR_PLATE_TEMPS_ID				0xFD
+#define MOTOR_PLATE_TEMPS_BOX				5
+#define MOTOR_PLATE_TEMPS_TRS				TRS5
 
-#define COOLANT_PRESSURES_ID		0x3E6
-#define COOLANT_PRESSURES_BOX	6
-#define COOLANT_PRESSURES_TRS	TRS6
+#define STRAIN_GAUGE_12_ID					0xFE
+#define STRAIN_GAUGE_12_BOX					6
+#define STRAIN_GAUGE_12_TRS					TRS6
 
-#define EMRAX_TEMP_ID			0x3DF
-#define EMRAX_TEMP_BOX			7
-#define EMRAX_TEMP_TRS			TRS7
+#define STRAIN_GAUGE_34_ID					0xFF
+#define STRAIN_GAUGE_34_BOX					6
+#define STRAIN_GAUGE_34_TRS					TRS6
 
-#define AMBIENT_TEMP_ID			0x3E0
-#define AMBIENT_TEMP_BOX		8
-#define AMBIENT_TEMP_TRS		TRS8
-
-#define MOTOR_PLATE_TEMP_ID		0x3E1
-#define MOTOR_PLATE_TEMP_BOX	9
-#define MOTOR_PLATE_TEMP_TRS	TRS9
-
-
+#define STRAIN_GAUGE_56_ID					0x100
+#define STRAIN_GAUGE_56_BOX					6
+#define STRAIN_GAUGE_56_TRS					TRS6
 
 
 #endif /* CAN_H_ */
