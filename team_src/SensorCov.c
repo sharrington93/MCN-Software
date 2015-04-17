@@ -50,24 +50,24 @@ void SensorCovInit()
 {
 	//todo USER: SensorCovInit()
 	SystemSensorInit(SENSOR_COV_STOPWATCH);
-	initDSPfilter(&A0filter, ALPHA_SYS);
-	initDSPfilter(&A1filter, ALPHA_SYS);
-	initDSPfilter(&A2filter, ALPHA_SYS);
-	initDSPfilter(&A3filter, ALPHA_SYS);
-	initDSPfilter(&A4filter, ALPHA_SYS);
-	initDSPfilter(&A5filter, ALPHA_SYS);
-	initDSPfilter(&A6filter, ALPHA_SYS);
-	initDSPfilter(&A7filter, ALPHA_SYS);
-	initDSPfilter(&B0filter, ALPHA_SYS);
-	initDSPfilter(&B1filter, ALPHA_SYS);
-	initDSPfilter(&B2filter, ALPHA_SYS);
-	initDSPfilter(&B3filter, ALPHA_SYS);
-	initDSPfilter(&B4filter, ALPHA_SYS);
-	initDSPfilter(&B5filter, ALPHA_SYS);
-	initDSPfilter(&B6filter, ALPHA_SYS);
-	initDSPfilter(&B7filter, ALPHA_SYS);
-	ConfigGPIOSensor(410, 10000, 26, 0, 2);
-	ConfigGPIOSensor(410, 10000, 19, 0, 2);
+	initDSPfilter(&A0filter, ALPHA_SYS);		//12standby
+	initDSPfilter(&A1filter, ALPHA_SYS); 		//12v_shunt
+	//initDSPfilter(&A2filter, ALPHA_SYS);
+	initDSPfilter(&A3filter, ALPHA_REAR_BRAKE); // REAR_BRAKE
+	//initDSPfilter(&A4filter, ALPHA_SYS);
+	//initDSPfilter(&A5filter, ALPHA_SYS);
+	//initDSPfilter(&A6filter, ALPHA_SYS);
+	initDSPfilter(&A7filter, ALPHA_REAR_SUSP); 	//REAR susp
+	initDSPfilter(&B0filter, ALPHA_SYS);		//12v
+	//initDSPfilter(&B1filter, ALPHA_SYS);
+	initDSPfilter(&B2filter, ALPHA_SYS); 		//DC_DC_TEMP
+	initDSPfilter(&B3filter, ALPHA_SYS);		//3_3v
+	initDSPfilter(&B4filter, ALPHA_SYS);		//2_3v
+	//initDSPfilter(&B5filter, ALPHA_SYS);
+	initDSPfilter(&B6filter, ALPHA_SYS);		//1_5V
+	//initDSPfilter(&B7filter, ALPHA_SYS);
+	ConfigGPIOSensor(410, 10000, 26, 0, 2);		//wheel speed
+	ConfigGPIOSensor(410, 10000, 19, 0, 2);		//frame fault
 }
 
 
@@ -86,55 +86,37 @@ void SensorCovMeasure()
 	//use stopwatch to catch timeouts
 	//waiting should poll isStopWatchComplete() to catch timeout and throw StopWatchError
 
-	data_temp.coolant_flow.F32 = (GPIO26filter.filtered_value*0.283);
-	/*
-	data_temp.motor_coolant_temp.F32 = 70.0*(A4RESULT/4096.0);
-	data_temp.motor_control_coolant_temp.F32 = (140.0*(A5RESULT/4096.0)) - 50;
-	data_temp.radiator_coolant_temp.F32 = (140.0*(A0RESULT/4096.0)) - 50;
-	*/
-	v_in = 3.3*(A4RESULT/4096.0);
-	r_th = -1.0*(R1*R2*v_in)/((-1.0*R2*V5)+(R1*v_in)+(R2*v_in));
-	data_temp.motor_coolant_temp.F32 = (3435.0)/(log((r_th/0.0991912))) - 273.15;
+	data_temp.DC_DC_temp.F32 = DC_TEMP_VALUE; 	// need more information about resistors and thermistors.
 
-	v_in = 3.3*(A5RESULT/4096.0);
-	r_th = -1.0*(R1*R2*v_in)/((-1.0*R2*V5)+(R1*v_in)+(R2*v_in));
-	data_temp.motor_control_coolant_temp.F32 = (3435.0)/(log((r_th/0.0991912))) - 273.15;
-
-	v_in = 3.3*(A0RESULT/4096.0);
-	r_th = -1.0*(R1*R2*v_in)/((-1.0*R2*V5)+(R1*v_in)+(R2*v_in));
-	data_temp.radiator_coolant_temp.F32 = (3435.0)/(log((r_th/0.0991912))) - 273.15;
-
-	v_in = 3.3*(B1RESULT/4096.0);
-	r_th = -1.0*(R1*R2*v_in)/((-1.0*R2*V5)+(R1*v_in)+(R2*v_in));
-	data_temp.motor_plate_temp_1.F32 = (3380.0)/(log((r_th/0.119286))) - 273.15;
-
-	v_in = 3.3*(A1RESULT/4096.0);
-	r_th = -1.0*(R1*R2*v_in)/((-1.0*R2*V5)+(R1*v_in)+(R2*v_in));
-	data_temp.motor_plate_temp_2.F32 = (3380.0)/(log((r_th/0.119286))) - 273.15;
-
-	v_in = 3.3*(B4RESULT/4096.0);
-	r_th = -1.0*(R1*R2*v_in)/((-1.0*R2*V5)+(R1*v_in)+(R2*v_in));
-	data_temp.ambient_temp.F32 = (3380.0)/(log((r_th/0.119286))) - 273.15;
-
-	data_temp.motor_temp.F32 = (pow((B3RESULT/4096.0),2)*2380.13) + ((B3RESULT/4096.0)*940.533) - 232.125;
-
-	v_in = 3.3*(A7RESULT/4096.0);
-	data_temp.coolant_pressure_1.F32 = (37.5/V5)*(1.56*v_in) - 3.75;
-
-	v_in = 3.3*(A3RESULT/4096.0);
-	data_temp.coolant_pressure_2.F32 = (37.5/V5)*(1.56*v_in) - 3.75;
-
-	data_temp.gp_button = READGPBUTTON();
-	/*
-	if(A7RESULT > max)
+	if ( FRAME_FAULT_VALUE == 1)				// need more information about which output it is connected to.
 	{
-		max = A7RESULT;
+		data_temp.frame_fault = 1;
 	}
-	if(A7RESULT < min)
+	else
 	{
-		min = A7RESULT;
+		data_temp.frame_fault = 1;
 	}
-	*/
+
+	#define BRAKE_COV (3.3*(5.6+10))/(5.6*0.015*4096)
+	data_temp.rear_brake.F32 = REAR_BRAKE_VALUE*BRAKE_COV;
+
+	data_temp.rear_susp = REAR_SUSP_VALUE; 		//need more information about resistors
+
+	#define V12_COV (3.3*(36+10))/(36*4096)
+	data_temp.v12 = V12_VALUE * V12_COV;
+	data_temp.v12_standby = V12_STANDBY_VALUE* V12_COV;
+
+	data_temp.v12_shunt =  ALPHA_12V_SHUNT; 	//need more information about the shunt
+
+	#define V1_5_COV (3.3*(5.6+10))/(5.6*4096)
+	data_temp.v1_5 = V1_5_VALUE *  V1_5_COV;
+
+	#define VOLT_COV (3.3)/(4096)
+	data_temp.v2_3 = V2_3_VALUE * VOLT_COV;
+	data_temp.v3_3 = V3_3_VALUE * VOLT_COV;
+
+	data_temp.wheel_speed = WHEEL_SPEED_VALUE; //need more information about tone wheel
+
 	PerformSystemChecks();
 }
 
