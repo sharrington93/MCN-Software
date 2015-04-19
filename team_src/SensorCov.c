@@ -67,7 +67,13 @@ void SensorCovInit()
 	initDSPfilter(&B6filter, ALPHA_SYS);		//1_5V
 	//initDSPfilter(&B7filter, ALPHA_SYS);
 	ConfigGPIOSensor(410, 10000, 26, 0, 2);		//wheel speed
-	ConfigGPIOSensor(410, 10000, 19, 0, 2);		//frame fault
+	//ConfigGPIOSensor(410, 10000, 19, 0, 2);
+
+	//Frame Fault
+	GpioCtrlRegs.GPAMUX2.bit.GPIO19 = 0;	//GPIO
+	GpioCtrlRegs.GPADIR.bit.GPIO19 = 0; 	//input
+	GpioCtrlRegs.GPAQSEL2.bit.GPIO19 = 0;	//Synch to SYSCLKOUT only
+	GpioCtrlRegs.GPAPUD.bit.GPIO19 = 0;		//enable pull up											//frame fault
 }
 
 
@@ -88,26 +94,19 @@ void SensorCovMeasure()
 
 	data_temp.DC_DC_temp.F32 = DC_TEMP_VALUE; 	// need more information about resistors and thermistors.
 
-	if ( FRAME_FAULT_VALUE == 1)				// need more information about which output it is connected to.
-	{
-		data_temp.frame_fault = 1;
-	}
-	else
-	{
-		data_temp.frame_fault = 1;
-	}
+	data_temp.frame_fault = FRAME_FAULT_VALUE;
 
 	#define BRAKE_COV (3.3*(5.6+10))/(5.6*0.015*4096)
 	data_temp.rear_brake.F32 = REAR_BRAKE_VALUE*BRAKE_COV;
 
-	data_temp.rear_susp = REAR_SUSP_VALUE; 		//need more information about resistors
+	data_temp.rear_susp = REAR_SUSP_VALUE/4096.0;
 
 	#define V12_COV (3.3*(36+10))/(36*4096)
 	data_temp.v12 = V12_VALUE * V12_COV;
 	data_temp.v12_standby = V12_STANDBY_VALUE* V12_COV;
 
-	data_temp.v12_shunt =  ALPHA_12V_SHUNT; 	//need more information about the shunt
-
+	#define SHUNT_COV (3.3)/(4096*20*.01)
+	data_temp.v12_shunt =  V12_SHUNT_VALUE * SHUNT_COV;
 	#define V1_5_COV (3.3*(5.6+10))/(5.6*4096)
 	data_temp.v1_5 = V1_5_VALUE *  V1_5_COV;
 

@@ -36,14 +36,12 @@ void CANSetup()
 	//gp_button TRANSMIT
 	//CreateCANMailbox(3,0,0,1,8,GP_BUTTON_ID,0);
 
-	CreateCANMailbox(COOLANT_FLOW_BOX,0,0,1,4,COOLANT_FLOW_ID,0); //CHECK AAM
-	CreateCANMailbox(MOTOR_TEMP_BOX,0,0,1,4,MOTOR_TEMP_ID,0);
-	CreateCANMailbox(MOTOR_CONT_TEMP_BOX,0,0,1,4,MOTOR_CONT_TEMP_ID, 0);
-	CreateCANMailbox(RADIATOR_TEMP_BOX,0,0,1,4,RADIATOR_TEMP_ID,0);
-	CreateCANMailbox(COOLANT_PRESSURES_BOX,0,0,1,8,COOLANT_PRESSURES_ID,0);
-	CreateCANMailbox(EMRAX_TEMP_BOX,0,0,1,4,EMRAX_TEMP_ID,0);
-	CreateCANMailbox(AMBIENT_TEMP_BOX,0,0,1,4,AMBIENT_TEMP_ID,0);
-	CreateCANMailbox(MOTOR_PLATE_TEMP_BOX,0,0,1,8,MOTOR_PLATE_TEMP_ID,0);
+	CreateCANMailbox(CONTACTOR_BOX_BOX,0,0,1,4,CONTACTOR_BOX_ID,0); //CHECK AAM
+	CreateCANMailbox(FRAME_FAULT_BOX,0,0,1,4,FRAME_FAULT_ID,0);
+	CreateCANMailbox(SHUNTS_BOX,0,0,1,4,SHUNTS_ID, 0);
+	CreateCANMailbox(REAR_WHEEL_SPEED_BOX,0,0,1,4,REAR_WHEEL_SPEED_ID,0);
+	CreateCANMailbox(REAR_BRAKE_BOX,0,0,1,8,REAR_BRAKE_ID,0);
+	CreateCANMailbox(REAR_SUSPENSION_BOX,0,0,1,4,REAR_SUSPENSION_ID,0);
 
     EDIS;
     FinishCANInit();
@@ -60,29 +58,23 @@ char FillCAN(unsigned int Mbox)
 		//InsertCANMessage(int Mbox, unsigned int MDH, unsigned int MDL)
 		switch (Mbox)
 		{
-		case COOLANT_FLOW_BOX:
-			InsertCANMessage(COOLANT_FLOW_BOX, 0, user_data.coolant_flow.U32);
+		case CONTACTOR_BOX_BOX:
+			InsertCANMessage(CONTACTOR_BOX_BOX, 0, user_data.DC_DC_temp.U32);
 			return 1;
-		case MOTOR_TEMP_BOX:
-			InsertCANMessage(MOTOR_TEMP_BOX, user_data.motor_coolant_temp.U32, user_data.motor_coolant_temp.U32);
+		case FRAME_FAULT_BOX:
+			InsertCANMessage(FRAME_FAULT_BOX, user_data.frame_fault);
 			return 1;
-		case MOTOR_CONT_TEMP_BOX:
-			InsertCANMessage(MOTOR_CONT_TEMP_BOX, user_data.motor_control_coolant_temp.U32, user_data.motor_control_coolant_temp.U32);
+		case SHUNTS_BOX:
+			InsertCANMessage(SHUNTS_BOX, user_data.v12_shunt.U32);
 			return 1;
-		case RADIATOR_TEMP_BOX:
-			InsertCANMessage(RADIATOR_TEMP_BOX, user_data.radiator_coolant_temp.U32, user_data.radiator_coolant_temp.U32);
+		case REAR_WHEEL_SPEED_BOX:
+			InsertCANMessage(REAR_WHEEL_SPEED_BOX, user_data.wheel_speed.U32);
 			return 1;
-		case COOLANT_PRESSURES_BOX:
-			InsertCANMessage(COOLANT_PRESSURES_BOX, user_data.coolant_pressure_2.U32, user_data.coolant_pressure_1.U32);
+		case REAR_BRAKE_BOX:
+			InsertCANMessage(REAR_BRAKE_BOX, user_data.rear_brake.U32);
 			return 1;
-		case EMRAX_TEMP_BOX:
-			InsertCANMessage(EMRAX_TEMP_BOX, 0, user_data.motor_temp.U32);
-			return 1;
-		case AMBIENT_TEMP_BOX:
-			InsertCANMessage(AMBIENT_TEMP_BOX, 0, user_data.ambient_temp.U32);
-			return 1;
-		case MOTOR_PLATE_TEMP_BOX:
-			InsertCANMessage(MOTOR_PLATE_TEMP_BOX, user_data.motor_plate_temp_2.U32, user_data.motor_plate_temp_1.U32);
+		case REAR_SUSPENSION_BOX:
+			InsertCANMessage(REAR_SUSPENSION_BOX, 0, user_data.rear_susp.U32);
 			return 1;
 		default:
 			return 0;

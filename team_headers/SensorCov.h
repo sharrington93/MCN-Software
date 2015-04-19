@@ -51,8 +51,7 @@ void SensorCovDeInit();
 #define ALPHA_WHEEL_SPEED			206
 #define WHEEL_SPEED_VALUE			GPIO26filter.filtered_value
 
-#define ALPHA_FRAME_FAULT			206
-#define FRAME_FAULT_VALUE			GPIO19filter.filtered_value
+#define FRAME_FAULT_VALUE			GpioDataRegs.GPADAT.bit.GPIO19
 
 
 #define SENSOR_COV_STOPWATCH 100000
