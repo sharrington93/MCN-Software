@@ -21,34 +21,34 @@ void SensorCovDeInit();
  * alpha = (1.0 - exp(-2.0 * PI * (CANFrequency / samplingFrequency))) * 2^16;
  */
 
-#define ALPHA_REAR_SUSP				206
+#define ALPHA_REAR_SUSP				17668
 #define REAR_SUSP_VALUE				A7filter.filtered_value
 
-#define ALPHA_REAR_BRAKE			206
+#define ALPHA_REAR_BRAKE			410
 #define REAR_BRAKE_VALUE			A3filter.filtered_value
 
-#define ALPHA_12V_SHUNT				206
+#define ALPHA_12V_SHUNT				205
 #define V12_SHUNT_VALUE				A1filter.filtered_value
 
-#define ALPHA_1_5V					206
+#define ALPHA_1_5V					41
 #define V1_5_VALUE					B6filter.filtered_value
 
-#define ALPHA_2_3V					206
+#define ALPHA_2_3V					41
 #define V2_3_VALUE					B4filter.filtered_value
 
-#define ALPHA_3_3V					206
+#define ALPHA_3_3V					41
 #define V3_3_VALUE					B3filter.filtered_value
 
-#define ALPHA_12V					206
+#define ALPHA_12V					41
 #define V12_VALUE					B0filter.filtered_value
 
-#define ALPHA_DC_TEMP				206
+#define ALPHA_DC_TEMP				41
 #define DC_TEMP_VALUE				B2filter.filtered_value
 
-#define ALPHA_12V_STANDBY			206
+#define ALPHA_12V_STANDBY			41
 #define V12_STANDBY_VALUE			A0filter.filtered_value
 
-#define ALPHA_WHEEL_SPEED			206
+#define ALPHA_WHEEL_SPEED			9526
 #define WHEEL_SPEED_VALUE			GPIO26filter.filtered_value
 
 #define FRAME_FAULT_VALUE			GpioDataRegs.GPADAT.bit.GPIO19

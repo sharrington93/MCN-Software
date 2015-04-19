@@ -41,21 +41,45 @@ __interrupt void INT14_ISR(void)     // INT14 or CPU-Timer2
 
 	//todo USER: Define Clock ISR
 
-	Clock_Ticks.DataOut++;
+	Clock_Ticks.brake++;
+	Clock_Ticks.other++;
+	Clock_Ticks.shunts++;
+	Clock_Ticks.speed++;
+	Clock_Ticks.susp++;
 
-	if (Clock_Ticks.DataOut >= DATAOUT_TICKS)
+	if (Clock_Ticks.brake >= TICKS_BRAKE)
 	{
 		//send data or fill data
-		SendCAN(COOLANT_FLOW_BOX);
-		SendCAN(MOTOR_TEMP_BOX);
-		SendCAN(MOTOR_CONT_TEMP_BOX);
-		SendCAN(RADIATOR_TEMP_BOX);
-		SendCAN(COOLANT_PRESSURES_BOX);
-		SendCAN(MOTOR_PLATE_TEMP_BOX);
-		SendCAN(AMBIENT_TEMP_BOX);
-		SendCAN(EMRAX_TEMP_BOX);
-		Clock_Ticks.DataOut = 0;
+		SendCAN(REAR_BRAKE_BOX);
+		Clock_Ticks.brake = 0;
 	}
+	if (Clock_Ticks.other >= TICKS_OTHER)
+	{
+		//send data or fill data
+		SendCAN(FRAME_FAULT_BOX);
+		SendCAN(CONTACTOR_BOX_BOX);
+		Clock_Ticks.other = 0;
+	}
+	if (Clock_Ticks.shunts >= TICKS_SHUNTS)
+	{
+		//send data or fill data
+		SendCAN(SHUNTS_BOX);
+		Clock_Ticks.shunts = 0;
+	}
+	if (Clock_Ticks.speed >= TICKS_SPEED)
+	{
+		//send data or fill data
+		SendCAN(REAR_WHEEL_SPEED_BOX);
+		Clock_Ticks.speed = 0;
+	}
+	if (Clock_Ticks.susp >= TICKS_SUSP)
+	{
+		//send data or fill data
+		SendCAN(REAR_WHEEL_SPEED_BOX);
+		Clock_Ticks.susp = 0;
+	}
+
+
 
 	RestartCpuTimer2();
 	DINT;

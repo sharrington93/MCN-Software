@@ -11,9 +11,13 @@
 void ClockSetup();
 
 //todo USER: define clock
-#define CLOCK_PERIOD 100000 //uS //so a tenth of a second
+#define CLOCK_PERIOD 2000 	//uS
 
-#define DATAOUT_TICKS		2	//5hz
+#define TICKS_SUSP		1	//500hz
+#define TICKS_SPEED		2	//250hz (close enough)
+#define TICKS_SHUNTS	100 //5hz
+#define TICKS_BRAKE		50 // 10hz
+#define TICKS_OTHER		500 //1hz
 
 //todo USER: CLOCK_TICKS_CLEAR should have the same number of zeros as clock_struct has elements (as seen below)
 //#define CLOCK_TICKS_CLEAR {0,0}
@@ -21,7 +25,11 @@ void ClockSetup();
 
 typedef struct CLOCK_TICKS
 {
-	int DataOut;
+	int susp;
+	int speed;
+	int shunts;
+	int brake;
+	int other;
 }clock_struct;
 
 

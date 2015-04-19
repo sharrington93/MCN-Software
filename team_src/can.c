@@ -62,7 +62,11 @@ char FillCAN(unsigned int Mbox)
 			InsertCANMessage(CONTACTOR_BOX_BOX, 0, user_data.DC_DC_temp.U32);
 			return 1;
 		case FRAME_FAULT_BOX:
-			InsertCANMessage(FRAME_FAULT_BOX, user_data.frame_fault);
+			if(ECanaRegs.CANMD.bit.MD3 == 1) return 0;
+			ECanaMboxes.MBOX3.MDH.all = 0;
+			ECanaMboxes.MBOX3.MDL.all = 0;
+			ECanaMboxes.MBOX3.MDL.byte.BYTE3 = user_data.frame_fault;
+			break;
 			return 1;
 		case SHUNTS_BOX:
 			InsertCANMessage(SHUNTS_BOX, user_data.v12_shunt.U32);

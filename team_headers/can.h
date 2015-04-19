@@ -40,7 +40,7 @@ void BUS_OFF();
 
 #define REAR_BRAKE_ID			306
 #define REAR_BRAKE_BOX			6
-#define REAR_BRAKE_TRS	T		RS6
+#define REAR_BRAKE_TRS			RS6
 
 #define REAR_SUSPENSION_ID		300
 #define REAR_SUSPENSION_BOX		7
