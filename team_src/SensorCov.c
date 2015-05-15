@@ -86,18 +86,18 @@ void SensorCovMeasure()
 	//use stopwatch to catch timeouts
 	//waiting should poll isStopWatchComplete() to catch timeout and throw StopWatchError
 
-	data_temp.ain1.F32 = A7RESULT;
-	data_temp.ain2.F32 = A3RESULT;
-	data_temp.ain3.F32 = A1RESULT;
-	data_temp.ain4.F32 = B1RESULT;
-	data_temp.ain5.F32 = B2RESULT;
-	data_temp.ain6.F32 = B6RESULT;
-	data_temp.ain7.F32 = B4RESULT;
-	data_temp.ain8.F32 = B3RESULT;
-	data_temp.ain9.F32 = B0RESULT;
-	data_temp.ain10.F32 = A0RESULT;
-	data_temp.ain11.F32 = A4RESULT;
-	data_temp.ain12.F32 = A5RESULT;
+	data_temp.ain1.F32 = (A7RESULT/4096.0)*3.3;
+	data_temp.ain2.F32 = (A3RESULT/4096.0)*3.3;
+	data_temp.ain3.F32 = (A1RESULT/4096.0)*3.3;
+	data_temp.ain4.F32 = (B1RESULT/4096.0)*3.3;
+	data_temp.ain5.F32 = (B2RESULT/4096.0)*3.3;
+	data_temp.ain6.F32 = (B6RESULT/4096.0)*3.3;
+	data_temp.ain7.F32 = (B4RESULT/4096.0)*3.3;
+	data_temp.ain8.F32 = (B3RESULT/4096.0)*3.3;
+	data_temp.ain9.F32 = (B0RESULT/4096.0)*3.3;
+	data_temp.ain10.F32 = (A0RESULT/4096.0)*3.3;
+	data_temp.ain11.F32 = (A4RESULT/4096.0)*3.3;
+	data_temp.ain12.F32 = (A5RESULT/4096.0)*3.3;
 	data_temp.gp0.F32 = GPIO19filter.filtered_value;
 	data_temp.gp1.F32 = GPIO26filter.filtered_value;
 

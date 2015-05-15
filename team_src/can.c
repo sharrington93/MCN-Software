@@ -40,16 +40,16 @@ void CANSetup()
 	CreateCANMailbox(AIN2_BOX,0,0,1,4,AIN2_ID,0);
 	CreateCANMailbox(AIN3_BOX,0,0,1,4,AIN3_ID, 0);
 	CreateCANMailbox(AIN4_BOX,0,0,1,4,AIN4_ID,0);
-	CreateCANMailbox(AIN5_BOX,0,0,1,8,AIN5_ID,0);
+	CreateCANMailbox(AIN5_BOX,0,0,1,4,AIN5_ID,0);
 	CreateCANMailbox(AIN6_BOX,0,0,1,4,AIN6_ID,0);
 	CreateCANMailbox(AIN7_BOX,0,0,1,4,AIN7_ID,0);
-	CreateCANMailbox(AIN8_BOX,0,0,1,8,AIN8_ID,0);
-	CreateCANMailbox(AIN9_BOX,0,0,1,8,AIN9_ID,0);
-	CreateCANMailbox(AIN10_BOX,0,0,1,8,AIN10_ID,0);
-	CreateCANMailbox(AIN11_BOX,0,0,1,8,AIN11_ID,0);
-	CreateCANMailbox(AIN12_BOX,0,0,1,8,AIN12_ID,0);
-	CreateCANMailbox(GP0_BOX,0,0,1,8,GP0_ID,0);
-	CreateCANMailbox(GP1_BOX,0,0,1,8,GP1_ID,0);
+	CreateCANMailbox(AIN8_BOX,0,0,1,4,AIN8_ID,0);
+	CreateCANMailbox(AIN9_BOX,0,0,1,4,AIN9_ID,0);
+	CreateCANMailbox(AIN10_BOX,0,0,1,4,AIN10_ID,0);
+	CreateCANMailbox(AIN11_BOX,0,0,1,4,AIN11_ID,0);
+	CreateCANMailbox(AIN12_BOX,0,0,1,4,AIN12_ID,0);
+	CreateCANMailbox(GP0_BOX,0,0,1,4,GP0_ID,0);
+	CreateCANMailbox(GP1_BOX,0,0,1,4,GP1_ID,0);
 
     EDIS;
     FinishCANInit();
@@ -101,6 +101,12 @@ char FillCAN(unsigned int Mbox)
 			return 1;
 		case AIN12_BOX:
 			InsertCANMessage(AIN12_BOX, 0, user_data.ain12.U32);
+			return 1;
+		case GP0_BOX:
+			InsertCANMessage(GP0_BOX, 0, user_data.gp0.U32);
+			return 1;
+		case GP1_BOX:
+			InsertCANMessage(GP1_BOX, 0, user_data.gp1.U32);
 			return 1;
 		default:
 			return 0;
