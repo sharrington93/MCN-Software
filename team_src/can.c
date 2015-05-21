@@ -37,13 +37,12 @@ void CANSetup()
 	//CreateCANMailbox(3,0,0,1,8,GP_BUTTON_ID,0);
 
 	CreateCANMailbox(COOLANT_FLOW_BOX,0,0,1,4,COOLANT_FLOW_ID,0); //CHECK AAM
-	CreateCANMailbox(MOTOR_TEMP_BOX,0,0,1,4,MOTOR_TEMP_ID,0);
-	CreateCANMailbox(MOTOR_CONT_TEMP_BOX,0,0,1,4,MOTOR_CONT_TEMP_ID, 0);
-	CreateCANMailbox(RADIATOR_TEMP_BOX,0,0,1,4,RADIATOR_TEMP_ID,0);
-	CreateCANMailbox(COOLANT_PRESSURES_BOX,0,0,1,8,COOLANT_PRESSURES_ID,0);
-	CreateCANMailbox(EMRAX_TEMP_BOX,0,0,1,4,EMRAX_TEMP_ID,0);
-	CreateCANMailbox(AMBIENT_TEMP_BOX,0,0,1,4,AMBIENT_TEMP_ID,0);
-	CreateCANMailbox(MOTOR_PLATE_TEMP_BOX,0,0,1,8,MOTOR_PLATE_TEMP_ID,0);
+	CreateCANMailbox(POWERTRAIN_COOLANT_TEMP_BOX,0,0,1,4,POWERTRAIN_COOLANT_TEMP_ID,0);
+	CreateCANMailbox(MOTOR_AIR_PRESSURES_BOX,0,0,1,4,MOTOR_AIR_PRESSURES_ID, 0);
+	CreateCANMailbox(MOTOR_PLATE_TEMPS_BOX,0,0,1,4,MOTOR_PLATE_TEMPS_ID,0);
+	CreateCANMailbox(STRAIN_GAUGE_12_BOX,0,0,1,8,STRAIN_GAUGE_12_ID,0);
+	CreateCANMailbox(STRAIN_GAUGE_34_BOX,0,0,1,4,STRAIN_GAUGE_34_ID,0);
+	CreateCANMailbox(STRAIN_GAUGE_45_BOX,0,0,1,4,STRAIN_GAUGE_45_ID,0);
 
     EDIS;
     FinishCANInit();
@@ -63,26 +62,23 @@ char FillCAN(unsigned int Mbox)
 		case COOLANT_FLOW_BOX:
 			InsertCANMessage(COOLANT_FLOW_BOX, 0, user_data.coolant_flow.U32);
 			return 1;
-		case MOTOR_TEMP_BOX:
-			InsertCANMessage(MOTOR_TEMP_BOX, user_data.motor_coolant_temp.U32, user_data.motor_coolant_temp.U32);
+		case POWERTRAIN_COOLANT_TEMP_BOX:
+			InsertCANMessage(POWERTRAIN_COOLANT_TEMP_BOX, user_data.motor_control_coolant_temp, user_data.motor_coolant_temp.U32);
 			return 1;
-		case MOTOR_CONT_TEMP_BOX:
-			InsertCANMessage(MOTOR_CONT_TEMP_BOX, user_data.motor_control_coolant_temp.U32, user_data.motor_control_coolant_temp.U32);
+		case MOTOR_AIR_PRESSURES_BOX:
+			InsertCANMessage(MOTOR_AIR_PRESSURES_BOX, 0, user_data.motor_inlet_pressure.U32);
 			return 1;
-		case RADIATOR_TEMP_BOX:
-			InsertCANMessage(RADIATOR_TEMP_BOX, user_data.radiator_coolant_temp.U32, user_data.radiator_coolant_temp.U32);
+		case MOTOR_PLATE_TEMPS_BOX:
+			InsertCANMessage(MOTOR_PLATE_TEMPS_BOX, user_data.motor_plate_temp_2.U32, user_data.motor_plate_temp_1.U32);
 			return 1;
-		case COOLANT_PRESSURES_BOX:
-			InsertCANMessage(COOLANT_PRESSURES_BOX, user_data.coolant_pressure_2.U32, user_data.coolant_pressure_1.U32);
+		case STRAIN_GAUGE_12_BOX:
+			InsertCANMessage(STRAIN_GAUGE_12_BOX, user_data.strain_gauge_2.U32, user_data.strain_gauge_1.U32);
 			return 1;
-		case EMRAX_TEMP_BOX:
-			InsertCANMessage(EMRAX_TEMP_BOX, 0, user_data.motor_temp.U32);
+		case STRAIN_GAUGE_34_BOX:
+			InsertCANMessage(STRAIN_GAUGE_34_BOX, user_data.strain_gauge_4.U32, user_data.strain_gauge_3.U32);
 			return 1;
-		case AMBIENT_TEMP_BOX:
-			InsertCANMessage(AMBIENT_TEMP_BOX, 0, user_data.ambient_temp.U32);
-			return 1;
-		case MOTOR_PLATE_TEMP_BOX:
-			InsertCANMessage(MOTOR_PLATE_TEMP_BOX, user_data.motor_plate_temp_2.U32, user_data.motor_plate_temp_1.U32);
+		case STRAIN_GAUGE_12_BOX:
+			InsertCANMessage(STRAIN_GAUGE_56_BOX, user_data.strain_gauge_6.U32, user_data.strain_gauge_5.U32);
 			return 1;
 		default:
 			return 0;
@@ -98,13 +94,12 @@ void FillCANData()
 {
 	//todo USER: use FillCAN to put data into correct mailboxes
 	FillCAN(COOLANT_FLOW_BOX);
-	FillCAN(MOTOR_TEMP_BOX);
-	FillCAN(MOTOR_CONT_TEMP_BOX);
-	FillCAN(RADIATOR_TEMP_BOX);
-	FillCAN(COOLANT_PRESSURES_BOX);
-	FillCAN(EMRAX_TEMP_BOX);
-	FillCAN(AMBIENT_TEMP_BOX);
-	FillCAN(MOTOR_PLATE_TEMP_BOX);
+	FillCAN(POWERTRAIN_COOLANT_TEMP_BOX);
+	FillCAN(MOTOR_AIR_PRESSURES_BOX);
+	FillCAN(MOTOR_PLATE_TEMPS_BOX);
+	FillCAN(STRAIN_GAUGE_12_BOX);
+	FillCAN(STRAIN_GAUGE_34_BOX);
+	FillCAN(STRAIN_GAUGE_56_BOX);
 }
 
 // INT9.6
