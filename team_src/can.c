@@ -42,7 +42,7 @@ void CANSetup()
 	CreateCANMailbox(MOTOR_PLATE_TEMPS_BOX,0,0,1,4,MOTOR_PLATE_TEMPS_ID,0);
 	CreateCANMailbox(STRAIN_GAUGE_12_BOX,0,0,1,8,STRAIN_GAUGE_12_ID,0);
 	CreateCANMailbox(STRAIN_GAUGE_34_BOX,0,0,1,4,STRAIN_GAUGE_34_ID,0);
-	CreateCANMailbox(STRAIN_GAUGE_45_BOX,0,0,1,4,STRAIN_GAUGE_45_ID,0);
+	CreateCANMailbox(STRAIN_GAUGE_56_BOX,0,0,1,4,STRAIN_GAUGE_56_ID,0);
 
     EDIS;
     FinishCANInit();
@@ -63,10 +63,10 @@ char FillCAN(unsigned int Mbox)
 			InsertCANMessage(COOLANT_FLOW_BOX, 0, user_data.coolant_flow.U32);
 			return 1;
 		case POWERTRAIN_COOLANT_TEMP_BOX:
-			InsertCANMessage(POWERTRAIN_COOLANT_TEMP_BOX, user_data.motor_control_coolant_temp, user_data.motor_coolant_temp.U32);
+			InsertCANMessage(POWERTRAIN_COOLANT_TEMP_BOX, user_data.motor_control_coolant_temp.U32, user_data.motor_coolant_temp.U32);
 			return 1;
 		case MOTOR_AIR_PRESSURES_BOX:
-			InsertCANMessage(MOTOR_AIR_PRESSURES_BOX, 0, user_data.motor_inlet_pressure.U32);
+			InsertCANMessage(MOTOR_AIR_PRESSURES_BOX, user_data.motor_air_pressure_2.U32, user_data.motor_air_pressure_1.U32);
 			return 1;
 		case MOTOR_PLATE_TEMPS_BOX:
 			InsertCANMessage(MOTOR_PLATE_TEMPS_BOX, user_data.motor_plate_temp_2.U32, user_data.motor_plate_temp_1.U32);
@@ -77,7 +77,7 @@ char FillCAN(unsigned int Mbox)
 		case STRAIN_GAUGE_34_BOX:
 			InsertCANMessage(STRAIN_GAUGE_34_BOX, user_data.strain_gauge_4.U32, user_data.strain_gauge_3.U32);
 			return 1;
-		case STRAIN_GAUGE_12_BOX:
+		case STRAIN_GAUGE_56_BOX:
 			InsertCANMessage(STRAIN_GAUGE_56_BOX, user_data.strain_gauge_6.U32, user_data.strain_gauge_5.U32);
 			return 1;
 		default:

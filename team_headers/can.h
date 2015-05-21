@@ -43,12 +43,12 @@ void BUS_OFF();
 #define STRAIN_GAUGE_12_TRS					TRS6
 
 #define STRAIN_GAUGE_34_ID					0xFF
-#define STRAIN_GAUGE_34_BOX					6
-#define STRAIN_GAUGE_34_TRS					TRS6
+#define STRAIN_GAUGE_34_BOX					7
+#define STRAIN_GAUGE_34_TRS					TRS7
 
 #define STRAIN_GAUGE_56_ID					0x100
-#define STRAIN_GAUGE_56_BOX					6
-#define STRAIN_GAUGE_56_TRS					TRS6
+#define STRAIN_GAUGE_56_BOX					8
+#define STRAIN_GAUGE_56_TRS					TRS8
 
 
 #endif /* CAN_H_ */

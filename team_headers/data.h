@@ -19,7 +19,8 @@ typedef struct USER_DATA
 	canfloat coolant_flow;
 	canfloat motor_coolant_temp;
 	canfloat motor_control_coolant_temp;
-	canfloat motor_inlet_pressure;
+	canfloat motor_air_pressure_1;
+	canfloat motor_air_pressure_2;
 	canfloat motor_plate_temp_1;
 	canfloat motor_plate_temp_2;
 	canfloat strain_gauge_1;

@@ -112,20 +112,15 @@ void SensorCovMeasure()
 	r_th = -1.0*(R1*R2*v_in)/((-1.0*R2*V5)+(R1*v_in)+(R2*v_in));
 	data_temp.motor_plate_temp_2.F32 = (3380.0)/(log((r_th/0.119286))) - 273.15;
 
+	data_temp.motor_air_pressure_1.F32 = 0;
+	data_temp.motor_air_pressure_2.F32 = 0;
 
-
-
-	v_in = 3.3*(B4RESULT/4096.0);
-	r_th = -1.0*(R1*R2*v_in)/((-1.0*R2*V5)+(R1*v_in)+(R2*v_in));
-	data_temp.ambient_temp.F32 = (3380.0)/(log((r_th/0.119286))) - 273.15;
-
-	data_temp.motor_temp.F32 = (pow((B3RESULT/4096.0),2)*2380.13) + ((B3RESULT/4096.0)*940.533) - 232.125;
-
-	v_in = 3.3*(A7RESULT/4096.0);
-	data_temp.coolant_pressure_1.F32 = (37.5/V5)*(1.56*v_in) - 3.75;
-
-	v_in = 3.3*(A3RESULT/4096.0);
-	data_temp.coolant_pressure_2.F32 = (37.5/V5)*(1.56*v_in) - 3.75;
+	data_temp.strain_gauge_1.F32 = 0;
+	data_temp.strain_gauge_2.F32 = 0;
+	data_temp.strain_gauge_3.F32 = 0;
+	data_temp.strain_gauge_4.F32 = 0;
+	data_temp.strain_gauge_5.F32 = 0;
+	data_temp.strain_gauge_6.F32 = 0;
 
 	data_temp.gp_button = READGPBUTTON();
 	/*
