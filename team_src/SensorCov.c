@@ -112,8 +112,11 @@ void SensorCovMeasure()
 	r_th = -1.0*(R1*R2*v_in)/((-1.0*R2*V5)+(R1*v_in)+(R2*v_in));
 	data_temp.motor_plate_temp_2.F32 = (3380.0)/(log((r_th/0.119286))) - 273.15;
 
-	data_temp.motor_air_pressure_1.F32 = 0;
-	data_temp.motor_air_pressure_2.F32 = 0;
+	v_in = 3.3 * (A7RESULT/4096.0);
+	data_temp.motor_air_pressure_1.F32 = (v_in/(Vs*0.004)) + 0.04;
+
+	v_in = 3.3 * (B1RESULT/4096.0);
+	data_temp.motor_air_pressure_2.F32 = (v_in/(Vs*0.004)) + 0.04;
 
 	data_temp.strain_gauge_1.F32 = 0;
 	data_temp.strain_gauge_2.F32 = 0;
