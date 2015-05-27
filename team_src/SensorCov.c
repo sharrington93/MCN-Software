@@ -99,7 +99,7 @@ void SensorCovMeasure()
 	#define BRAKE_COV (3.3*(5.6+10))/(5.6*0.015*4096)
 	data_temp.rear_brake.F32 = REAR_BRAKE_VALUE*BRAKE_COV;
 
-	data_temp.rear_susp.F32 = REAR_SUSP_VALUE/4096.0;
+	data_temp.rear_susp.F32 = 0.1016 - (0.1016* (REAR_SUSP_VALUE/4096.0));
 
 	#define V12_COV (3.3*(36+10))/(36*4096)
 	data_temp.v12.F32 = V12_VALUE * V12_COV;
