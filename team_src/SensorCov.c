@@ -97,7 +97,7 @@ void SensorCovMeasure()
 	data_temp.front_wheel_speed.F32 = (GPIO26filter.filtered_value * ((2*PI)/50))/(0.0001);
 
 	//Front suspension travel
-	data_temp.front_suspension_travel.F32 = (B1RESULT/4096.0);
+	data_temp.front_suspension_travel.F32 = 0.1524 - ((A7RESULT/4096.0) * 0.1524);
 
 	data_temp.steering_angle.F32 = (A1RESULT/4096.0); //A1RESULT
 
