@@ -101,9 +101,9 @@ void SensorCovMeasure()
 
 	data_temp.steering_angle.F32 = (A1RESULT/4096.0); //A1RESULT
 
-	v_in = 3.3 * (A3RESULT/4096.0);	 				//Vm
+	v_in = 3.29 * (A3RESULT/4096.0);	 				//Vm
 	v_in = v_in * (15.6/10); 						//Vout
-	data_temp.front_brake_pressure.F32 = ((v_in-.5)*3000)/(4); //P
+	data_temp.front_brake_pressure.F32 = ((v_in-0.5)/0.015) * 14.5038; //P
 
 	v_in = 3.3*(B1RESULT/4096.0);
 	r_th = -1.0*(R1*R2*v_in)/((-1.0*R2*V5)+(R1*v_in)+(R2*v_in));
