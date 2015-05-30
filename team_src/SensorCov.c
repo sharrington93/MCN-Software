@@ -86,6 +86,7 @@ void SensorCovMeasure()
 	#define R2 20000.0
 	#define V5 5.08
 	#define B 1568.583480 //Ohm
+	#define Vs 5.1 // Vdc ... Find out what this actually is
 
 	SensorCovSystemInit();
 
