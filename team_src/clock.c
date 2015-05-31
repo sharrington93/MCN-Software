@@ -58,15 +58,17 @@ __interrupt void INT14_ISR(void)     // INT14 or CPU-Timer2
 		SendCAN(FRONT_BRAKE_BOX);
 		Clock_Ticks.FrontBrakeOut = 0;
 	}
+	/*
 	if (Clock_Ticks.FrontWheelOut >= TWO_HUNDRED_HZ_TICKS)
 	{
 		SendCAN(FRONT_WHEEL_BOX);
 		Clock_Ticks.FrontWheelOut = 0;
 	}
+	*/
 	if (Clock_Ticks.SteeringSuspensionOut >= FIVE_HUNDRED_HZ_TICKS)
 	{
 		SendCAN(FRONT_SUSPENSION_BOX);
-		SendCAN(STEERING_BOX);
+		//SendCAN(STEERING_BOX);
 		Clock_Ticks.SteeringSuspensionOut = 0;
 	}
 
