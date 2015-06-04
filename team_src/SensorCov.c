@@ -115,8 +115,8 @@ void SensorCovMeasure()
 	v_in = 3.3 * (B2RESULT/4096.0);
 	data_temp.radiator_air_pressure.F32 = (v_in/(Vs*0.004)) + 0.04;
 
-	v_in = 3.3*(A0RESULT/4096.0);
-	r_th = -1.0*(R1*R2*v_in)/((-1.0*R2*V5)+(R1*v_in)+(R2*v_in));
+	v_in = (B6RESULT/4096.0);
+	r_th = (10000 * v_in) / (-1*v_in+1);
 	data_temp.radiator_coolant_temp.F32 = (3435.0)/(log((r_th/0.0991912))) - 273.15;
 
 
