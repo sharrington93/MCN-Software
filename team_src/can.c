@@ -41,7 +41,7 @@ void CANSetup()
 	CreateCANMailbox(FRONT_WHEEL_BOX,0,0,1,4,FRONT_WHEEL_ID, 0);
 	CreateCANMailbox(FRONT_BRAKE_BOX,0,0,1,4,FRONT_BRAKE_ID,0);
 	CreateCANMailbox(AMBIENT_BOX,0,0,1,8,AMBIENT_ID,0);
-	CreateCANMailbox(RADIATOR_BOX,0,0,1,4,RADIATOR_ID,0);
+	CreateCANMailbox(RADIATOR_BOX,0,0,1,8,RADIATOR_ID,0);
 
     EDIS;
     FinishCANInit();
