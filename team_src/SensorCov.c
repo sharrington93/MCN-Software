@@ -85,7 +85,8 @@ void SensorCovMeasure()
 	#define R1 10000.0 //Before ADC, Ohms
 	#define R2 20000.0
 	#define V5 5.08
-	#define B 1568.583480 //Ohm
+	//#define B 1568.583480 //Ohm
+	#define B 3435
 	#define Vs 5.1 // Vdc ... Find out what this actually is
 
 	SensorCovSystemInit();
@@ -97,12 +98,13 @@ void SensorCovMeasure()
 
 	data_temp.coolant_flow.F32 = (GPIO26filter.filtered_value*0.283);
 
-	v_in = 3.3*(A4RESULT/4096.0);
-	r_th = -1.0*(R1*R2*v_in)/((-1.0*R2*V5)+(R1*v_in)+(R2*v_in));
+	v_in = (A4RESULT/4096.0);
+	r_th = (10000 * v_in) / (-1*v_in+1);
 	data_temp.motor_coolant_temp.F32 = (3435.0)/(log((r_th/0.0991912))) - 273.15;
 
-	v_in = 3.3*(A5RESULT/4096.0);
-	r_th = -1.0*(R1*R2*v_in)/((-1.0*R2*V5)+(R1*v_in)+(R2*v_in));
+	v_in = (A5RESULT/4096.0);
+	//r_th = -1.0*(R1*R2*v_in)/((-1.0*R2*V5)+(R1*v_in)+(R2*v_in));
+	r_th = (10000 * v_in) / (-1*v_in+1);
 	data_temp.motor_control_coolant_temp.F32 = (3435.0)/(log((r_th/0.0991912))) - 273.15;
 
 	v_in = 3.3*(A3RESULT/4096.0);
