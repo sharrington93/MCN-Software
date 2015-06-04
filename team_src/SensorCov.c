@@ -92,7 +92,9 @@ void SensorCovMeasure()
 	//use stopwatch to catch timeouts
 	//waiting should poll isStopWatchComplete() to catch timeout and throw StopWatchError
 
-	data_temp.DC_DC_temp.F32 = DC_TEMP_VALUE; 	// need more information about resistors and thermistors.
+	v_in = (DC_TEMP_VALUE/4096.0);
+	r_th = (10000 * v_in) / (-1*v_in+1);
+	data_temp.DC_DC_temp.F32 = (3380)/(log((r_th/0.12864534))) - 273.15;; 	// need more information about resistors and thermistors.
 
 	data_temp.frame_fault = FRAME_FAULT_VALUE;
 
