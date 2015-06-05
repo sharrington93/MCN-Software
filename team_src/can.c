@@ -71,7 +71,7 @@ char FillCAN(unsigned int Mbox)
 			InsertCANMessage(FRONT_BRAKE_BOX, 0, user_data.front_brake_pressure.U32);
 			return 1;
 		case AMBIENT_BOX:
-			InsertCANMessage(AMBIENT_BOX, user_data.ambient_temperature.U32, user_data.ambient_pressure.U32);
+			InsertCANMessage(AMBIENT_BOX, user_data.ambient_pressure.U32, user_data.ambient_temperature.U32);
 			return 1;
 		case RADIATOR_BOX:
 			InsertCANMessage(RADIATOR_BOX, user_data.radiator_coolant_temp.U32, user_data.radiator_air_pressure.U32);

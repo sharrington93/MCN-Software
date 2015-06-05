@@ -105,9 +105,9 @@ void SensorCovMeasure()
 	v_in = v_in * (15.6/10); 						//Vout
 	data_temp.front_brake_pressure.F32 = ((v_in-0.5)/0.015) * 14.5038; //P
 
-	v_in = 3.3*(B1RESULT/4096.0);
-	r_th = -1.0*(R1*R2*v_in)/((-1.0*R2*V5)+(R1*v_in)+(R2*v_in));
-	data_temp.ambient_temperature.F32 = (3380.0)/(log((r_th/0.119286))) - 273.15;
+	v_in = (B1RESULT/4096.0);
+	r_th = (10000 * v_in) / (-1*v_in+1);
+	data_temp.ambient_temperature.F32 = (3380)/(log((r_th/0.12864534))) - 273.15;
 
 	v_in = 3.3 * (B4RESULT/4096.0);
 	data_temp.ambient_pressure.F32 = (v_in/(Vs*0.004)) + 0.04;
