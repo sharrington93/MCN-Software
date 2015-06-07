@@ -43,6 +43,12 @@ void CANSetup()
 	CreateCANMailbox(STRAIN_GAUGE_12_BOX,0,0,1,8,STRAIN_GAUGE_12_ID,0);
 	CreateCANMailbox(STRAIN_GAUGE_34_BOX,0,0,1,4,STRAIN_GAUGE_34_ID,0);
 	CreateCANMailbox(STRAIN_GAUGE_56_BOX,0,0,1,4,STRAIN_GAUGE_56_ID,0);
+	CreateCANMailbox(TRITIUM_ERRORS_BOX,0,0,1,4,TRITIUM_ERRORS_ID,1);
+	ECanaShadow.CANMD.bit.MD9 = 1;			//receive
+	ECanaShadow.CANME.bit.ME9 = 1;			//enable
+	ECanaShadow.CANMIM.bit.MIM9  = 1; 		//int enable
+	ECanaShadow.CANMIL.bit.MIL9  = 1;  		// Int.-Level MB#0  -> I1EN
+	CreateCANMailbox(TRITIUM_RESET_BOX,0,0,1,4,TRITIUM_RESET_ID,0);
 
     EDIS;
     FinishCANInit();
@@ -80,6 +86,8 @@ char FillCAN(unsigned int Mbox)
 		case STRAIN_GAUGE_56_BOX:
 			InsertCANMessage(STRAIN_GAUGE_56_BOX, user_data.strain_gauge_6.U32, user_data.strain_gauge_5.U32);
 			return 1;
+		case TRITIUM_RESET_BOX:
+			InsertCANMessage(TRITIUM_RESET_BOX, 0, 0);
 		default:
 			return 0;
 		}
@@ -107,6 +115,7 @@ __interrupt void ECAN1INTA_ISR(void)  // eCAN-A
 {
 	Uint32 ops_id;
 	Uint32 dummy;
+	Uint16 errors;
   	unsigned int mailbox_nr;
   	mailbox_nr = getMailboxNR();
   	//todo USER: Setup ops command
@@ -114,7 +123,19 @@ __interrupt void ECAN1INTA_ISR(void)  // eCAN-A
   	{
   		ReadCommand();
   	}
+  	else if(mailbox_nr == TRITIUM_ERRORS_BOX)
+  	{
+  		errors = ECanaMboxes.MBOX9.MDL.byte.BYTE1;
+  		if(errors > 0)
+  		{
+  			SendCAN(TRITIUM_RESET_BOX);
+  		}
+		ECanaRegs.CANRMP.bit.RMP9 = 1;
+
+  	}
   	//todo USER: Setup other reads
+
+
 
   	//To receive more interrupts from this PIE group, acknowledge this interrupt
   	PieCtrlRegs.PIEACK.all = PIEACK_GROUP9;

@@ -50,5 +50,12 @@ void BUS_OFF();
 #define STRAIN_GAUGE_56_BOX					8
 #define STRAIN_GAUGE_56_TRS					TRS8
 
+#define TRITIUM_ERRORS_ID					0x401
+#define TRITIUM_ERRORS_BOX					9
+#define TRITIUM_ERRORS_TRS					TRS9
+
+#define TRITIUM_RESET_ID					0x503
+#define TRITIUM_RESET_BOX					10
+#define TRITIUM_RESET_TRS					TRS10
 
 #endif /* CAN_H_ */
