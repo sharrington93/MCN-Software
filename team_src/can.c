@@ -49,6 +49,7 @@ void CANSetup()
 	ECanaShadow.CANMIM.bit.MIM9  = 1; 		//int enable
 	ECanaShadow.CANMIL.bit.MIL9  = 1;  		// Int.-Level MB#0  -> I1EN
 	CreateCANMailbox(TRITIUM_RESET_BOX,0,0,1,4,TRITIUM_RESET_ID,0);
+	CreateCANMailbox(SUPPLY_BOX,0,0,1,4,SUPPLY_ID,0);
 
     EDIS;
     FinishCANInit();
@@ -88,6 +89,8 @@ char FillCAN(unsigned int Mbox)
 			return 1;
 		case TRITIUM_RESET_BOX:
 			InsertCANMessage(TRITIUM_RESET_BOX, 0, 0);
+		case SUPPLY_BOX:
+			InsertCANMessage(SUPPLY_BOX, 0, user_data.v12.U32);
 		default:
 			return 0;
 		}
@@ -108,6 +111,7 @@ void FillCANData()
 	FillCAN(STRAIN_GAUGE_12_BOX);
 	FillCAN(STRAIN_GAUGE_34_BOX);
 	FillCAN(STRAIN_GAUGE_56_BOX);
+	FillCAN(SUPPLY_BOX);
 }
 
 // INT9.6

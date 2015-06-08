@@ -29,6 +29,7 @@ typedef struct USER_DATA
 	canfloat strain_gauge_4;
 	canfloat strain_gauge_5;
 	canfloat strain_gauge_6;
+	canfloat v12;
 
 	char gp_button;
 } user_data_struct;

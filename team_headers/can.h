@@ -58,4 +58,8 @@ void BUS_OFF();
 #define TRITIUM_RESET_BOX					10
 #define TRITIUM_RESET_TRS					TRS10
 
+#define SUPPLY_ID							1284
+#define SUPPLY_BOX							11
+#define SUPPLY_TRS							TRS11
+
 #endif /* CAN_H_ */

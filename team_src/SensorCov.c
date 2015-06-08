@@ -64,7 +64,7 @@ void SensorCovInit()
 	initDSPfilter(&A3filter, 206); //Motor Plate Temp 1
 	initDSPfilter(&A4filter, 206); //Motor Coolant Temp
 	initDSPfilter(&A5filter, 206); //Motor Controller Coolant Temp
-	initDSPfilter(&A6filter, ALPHA_SYS);
+	initDSPfilter(&A6filter, ALPHA_SYS); //12v
 	initDSPfilter(&A7filter, 410); //Motor Air Pressure 1
 	initDSPfilter(&B0filter, 2027); //Strain Gauge 5
 	initDSPfilter(&B1filter, 410); //Motor Air Pressure 2
@@ -127,6 +127,9 @@ void SensorCovMeasure()
 	data_temp.strain_gauge_4.F32 = 0;
 	data_temp.strain_gauge_5.F32 = 0;
 	data_temp.strain_gauge_6.F32 = 0;
+
+	v_in = 3.3 * (A6RESULT/4096.0);
+	data_temp.v12.F32 = v_in*((36+10)/10);
 
 	data_temp.gp_button = READGPBUTTON();
 	/*
