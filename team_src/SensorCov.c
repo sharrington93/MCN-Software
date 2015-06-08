@@ -64,7 +64,7 @@ void SensorCovInit()
 	initDSPfilter(&A3filter, 206); //Motor Plate Temp 1
 	initDSPfilter(&A4filter, 206); //Motor Coolant Temp
 	initDSPfilter(&A5filter, 206); //Motor Controller Coolant Temp
-	initDSPfilter(&A6filter, ALPHA_SYS);
+	initDSPfilter(&A6filter, ALPHA_SYS); //12v
 	initDSPfilter(&A7filter, 410); //Motor Air Pressure 1
 	initDSPfilter(&B0filter, 2027); //Strain Gauge 5
 	initDSPfilter(&B1filter, 410); //Motor Air Pressure 2
@@ -85,7 +85,9 @@ void SensorCovMeasure()
 	#define R1 10000.0 //Before ADC, Ohms
 	#define R2 20000.0
 	#define V5 5.08
-	#define B 1568.583480 //Ohm
+	//#define B 1568.583480 //Ohm
+	#define B 3435
+	#define Vs 5.1 // Vdc ... Find out what this actually is
 
 	SensorCovSystemInit();
 
@@ -96,12 +98,13 @@ void SensorCovMeasure()
 
 	data_temp.coolant_flow.F32 = (GPIO26filter.filtered_value*0.283);
 
-	v_in = 3.3*(A4RESULT/4096.0);
-	r_th = -1.0*(R1*R2*v_in)/((-1.0*R2*V5)+(R1*v_in)+(R2*v_in));
+	v_in = (A4RESULT/4096.0);
+	r_th = (10000 * v_in) / (-1*v_in+1);
 	data_temp.motor_coolant_temp.F32 = (3435.0)/(log((r_th/0.0991912))) - 273.15;
 
-	v_in = 3.3*(A5RESULT/4096.0);
-	r_th = -1.0*(R1*R2*v_in)/((-1.0*R2*V5)+(R1*v_in)+(R2*v_in));
+	v_in = (A5RESULT/4096.0);
+	//r_th = -1.0*(R1*R2*v_in)/((-1.0*R2*V5)+(R1*v_in)+(R2*v_in));
+	r_th = (10000 * v_in) / (-1*v_in+1);
 	data_temp.motor_control_coolant_temp.F32 = (3435.0)/(log((r_th/0.0991912))) - 273.15;
 
 	v_in = 3.3*(A3RESULT/4096.0);
@@ -112,20 +115,21 @@ void SensorCovMeasure()
 	r_th = -1.0*(R1*R2*v_in)/((-1.0*R2*V5)+(R1*v_in)+(R2*v_in));
 	data_temp.motor_plate_temp_2.F32 = (3380.0)/(log((r_th/0.119286))) - 273.15;
 
+	v_in = 3.3 * (A7RESULT/4096.0);
+	data_temp.motor_air_pressure_1.F32 = (v_in/(Vs*0.004)) + 0.04;
 
+	v_in = 3.3 * (B1RESULT/4096.0);
+	data_temp.motor_air_pressure_2.F32 = (v_in/(Vs*0.004)) + 0.04;
 
+	data_temp.strain_gauge_1.F32 = 0;
+	data_temp.strain_gauge_2.F32 = 0;
+	data_temp.strain_gauge_3.F32 = 0;
+	data_temp.strain_gauge_4.F32 = 0;
+	data_temp.strain_gauge_5.F32 = 0;
+	data_temp.strain_gauge_6.F32 = 0;
 
-	v_in = 3.3*(B4RESULT/4096.0);
-	r_th = -1.0*(R1*R2*v_in)/((-1.0*R2*V5)+(R1*v_in)+(R2*v_in));
-	data_temp.ambient_temp.F32 = (3380.0)/(log((r_th/0.119286))) - 273.15;
-
-	data_temp.motor_temp.F32 = (pow((B3RESULT/4096.0),2)*2380.13) + ((B3RESULT/4096.0)*940.533) - 232.125;
-
-	v_in = 3.3*(A7RESULT/4096.0);
-	data_temp.coolant_pressure_1.F32 = (37.5/V5)*(1.56*v_in) - 3.75;
-
-	v_in = 3.3*(A3RESULT/4096.0);
-	data_temp.coolant_pressure_2.F32 = (37.5/V5)*(1.56*v_in) - 3.75;
+	v_in = 3.3 * (A6RESULT/4096.0);
+	data_temp.v12.F32 = v_in*((36+10)/10);
 
 	data_temp.gp_button = READGPBUTTON();
 	/*

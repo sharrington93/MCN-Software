@@ -63,6 +63,7 @@ __interrupt void INT14_ISR(void)     // INT14 or CPU-Timer2
 		SendCAN(COOLANT_FLOW_BOX);
 		SendCAN(POWERTRAIN_COOLANT_TEMP_BOX);
 		SendCAN(MOTOR_PLATE_TEMPS_BOX);
+		SendCAN(SUPPLY_BOX);
 		Clock_Ticks.group3_ticks = 0;
 	}
 

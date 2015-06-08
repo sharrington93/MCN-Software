@@ -33,7 +33,8 @@ void DataSetup()
 	//todo USER: DataSetup()
 	//add here and data.h
 	user_data.coolant_flow.U32 = 0;
-	user_data.motor_inlet_pressure.U32 = 0;
+	user_data.motor_air_pressure_1.U32 = 0;
+	user_data.motor_air_pressure_2.U32 = 0;
 	user_data.motor_plate_temp_1.U32 = 0;
 	user_data.motor_plate_temp_2.U32 = 0;
 	user_data.motor_control_coolant_temp.U32 = 0;
