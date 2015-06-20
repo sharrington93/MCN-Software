@@ -11,9 +11,18 @@
 void ClockSetup();
 
 //todo USER: define clock
-#define CLOCK_PERIOD 100000 //uS //so a tenth of a second
+#define CLOCK_PERIOD 1 //uS //thousandth of a second
 
-#define DATAOUT_TICKS		2	//5hz
+#define EIGHT_THOUSAND_HZ		125	//8 kHz
+#define NINE_THOUSAND_HZ		111 	//9 kHz
+#define TEN_HUNDRED_HZ			100
+#define ELEVEN_HUNDRED_HZ		91
+#define TWELVE_HUNDRED_HZ		83
+#define THIRTEEN_HUNDRED_HZ		77
+#define FOURTEEN_HUNDRED_HZ		71
+#define FIFTEEN_HUNDRED_HZ		67
+#define SIXTEEN_HUNDRED_HZ		63	//16 kHz
+
 
 //todo USER: CLOCK_TICKS_CLEAR should have the same number of zeros as clock_struct has elements (as seen below)
 //#define CLOCK_TICKS_CLEAR {0,0}

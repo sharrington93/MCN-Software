@@ -68,8 +68,85 @@ void SensorCovInit()
 	initDSPfilter(&B7filter, ALPHA_SYS);
 	ConfigGPIOSensor(410, 10000, 26, 0, 2);
 	ConfigGPIOSensor(410, 10000, 19, 0, 2);
+
+	ConfigDAC();
 }
 
+void ConfigDAC()
+{
+	EALLOW;
+	// CS
+	GpioCtrlRegs.GPAMUX1.bit.GPIO0 = 0;         // GPIO
+	GpioCtrlRegs.GPADIR.bit.GPIO0 = 1;          // output
+	GpioCtrlRegs.GPAQSEL1.bit.GPIO0 = 0;        //Synch to SYSCLKOUT only
+	GpioCtrlRegs.GPAPUD.bit.GPIO0 = 1; 			//disable pull up
+	GpioDataRegs.GPASET.bit.GPIO0 = 1;			// Set CS high
+
+	//MSB
+
+	GpioCtrlRegs.GPAMUX2.bit.GPIO20 = 0;         // GPIO
+	GpioCtrlRegs.GPADIR.bit.GPIO20 = 1;          // output
+	GpioCtrlRegs.GPAQSEL2.bit.GPIO20 = 0;        //Synch to SYSCLKOUT only
+	GpioCtrlRegs.GPAPUD.bit.GPIO20 = 1; 		//disable pull up
+
+	GpioCtrlRegs.GPAMUX1.bit.GPIO11 = 0;         // GPIO
+	GpioCtrlRegs.GPADIR.bit.GPIO11 = 1;          // output
+	GpioCtrlRegs.GPAQSEL1.bit.GPIO11 = 0;        //Synch to SYSCLKOUT only
+	GpioCtrlRegs.GPAPUD.bit.GPIO11 = 1; 		//disable pull up
+
+	GpioCtrlRegs.GPAMUX1.bit.GPIO9 = 0;         // GPIO
+	GpioCtrlRegs.GPADIR.bit.GPIO9 = 1;          // output
+	GpioCtrlRegs.GPAQSEL1.bit.GPIO9 = 0;        //Synch to SYSCLKOUT only
+	GpioCtrlRegs.GPAPUD.bit.GPIO9 = 1; 			//disable pull up
+
+	GpioCtrlRegs.GPAMUX1.bit.GPIO5 = 0;         // GPIO
+	GpioCtrlRegs.GPADIR.bit.GPIO5 = 1;          // output
+	GpioCtrlRegs.GPAQSEL1.bit.GPIO5 = 0;        //Synch to SYSCLKOUT only
+	GpioCtrlRegs.GPAPUD.bit.GPIO5 = 1; 			//disable pull up
+
+	GpioCtrlRegs.GPAMUX2.bit.GPIO18 = 0;         // GPIO
+	GpioCtrlRegs.GPADIR.bit.GPIO18 = 1;          // output
+	GpioCtrlRegs.GPAQSEL2.bit.GPIO18 = 0;        //Synch to SYSCLKOUT only
+	GpioCtrlRegs.GPAPUD.bit.GPIO18 = 1; 		//disable pull up
+
+	GpioCtrlRegs.GPAMUX2.bit.GPIO17 = 0;         // GPIO
+	GpioCtrlRegs.GPADIR.bit.GPIO17 = 1;          // output
+	GpioCtrlRegs.GPAQSEL2.bit.GPIO17 = 0;        //Synch to SYSCLKOUT only
+	GpioCtrlRegs.GPAPUD.bit.GPIO17 = 1; 		//disable pull up
+
+	GpioCtrlRegs.GPAMUX1.bit.GPIO8 = 0;         // GPIO
+	GpioCtrlRegs.GPADIR.bit.GPIO8 = 1;          // output
+	GpioCtrlRegs.GPAQSEL1.bit.GPIO8 = 0;        //Synch to SYSCLKOUT only
+	GpioCtrlRegs.GPAPUD.bit.GPIO8 = 1; 			//disable pull up
+
+	GpioCtrlRegs.GPAMUX2.bit.GPIO25 = 0;         // GPIO
+	GpioCtrlRegs.GPADIR.bit.GPIO25 = 1;          // output
+	GpioCtrlRegs.GPAQSEL2.bit.GPIO25 = 0;        //Synch to SYSCLKOUT only
+	GpioCtrlRegs.GPAPUD.bit.GPIO25 = 1; 		//disable pull up
+
+	GpioCtrlRegs.GPBMUX1.bit.GPIO44 = 0;         // GPIO
+	GpioCtrlRegs.GPBDIR.bit.GPIO44 = 1;          // output
+	GpioCtrlRegs.GPBQSEL1.bit.GPIO44 = 0;        //Synch to SYSCLKOUT only
+	GpioCtrlRegs.GPBPUD.bit.GPIO44 = 1; 		//disable pull up
+
+	GpioCtrlRegs.GPAMUX2.bit.GPIO16 = 0;         // GPIO
+	GpioCtrlRegs.GPADIR.bit.GPIO16 = 1;          // output
+	GpioCtrlRegs.GPAQSEL2.bit.GPIO16 = 0;        //Synch to SYSCLKOUT only
+	GpioCtrlRegs.GPAPUD.bit.GPIO16 = 1; 		//disable pull up
+
+	GpioCtrlRegs.GPBMUX1.bit.GPIO41 = 0;         // GPIO
+	GpioCtrlRegs.GPBDIR.bit.GPIO41 = 1;          // output
+	GpioCtrlRegs.GPBQSEL1.bit.GPIO41 = 0;        //Synch to SYSCLKOUT only
+	GpioCtrlRegs.GPBPUD.bit.GPIO41 = 1; 		//disable pull up
+
+	GpioCtrlRegs.GPAMUX1.bit.GPIO6 = 0;         // GPIO
+	GpioCtrlRegs.GPADIR.bit.GPIO6 = 1;          // output
+	GpioCtrlRegs.GPAQSEL1.bit.GPIO6 = 0;        //Synch to SYSCLKOUT only
+	GpioCtrlRegs.GPAPUD.bit.GPIO6 = 1; 			//disable pull up
+
+	//LSB
+	EDIS;
+}
 
 
 void SensorCovMeasure()
@@ -86,55 +163,8 @@ void SensorCovMeasure()
 	//use stopwatch to catch timeouts
 	//waiting should poll isStopWatchComplete() to catch timeout and throw StopWatchError
 
-	data_temp.coolant_flow.F32 = (GPIO26filter.filtered_value*0.283);
-	/*
-	data_temp.motor_coolant_temp.F32 = 70.0*(A4RESULT/4096.0);
-	data_temp.motor_control_coolant_temp.F32 = (140.0*(A5RESULT/4096.0)) - 50;
-	data_temp.radiator_coolant_temp.F32 = (140.0*(A0RESULT/4096.0)) - 50;
-	*/
-	v_in = 3.3*(A4RESULT/4096.0);
-	r_th = -1.0*(R1*R2*v_in)/((-1.0*R2*V5)+(R1*v_in)+(R2*v_in));
-	data_temp.motor_coolant_temp.F32 = (3435.0)/(log((r_th/0.0991912))) - 273.15;
+	//data_temp.MotorVelocity.F32;
 
-	v_in = 3.3*(A5RESULT/4096.0);
-	r_th = -1.0*(R1*R2*v_in)/((-1.0*R2*V5)+(R1*v_in)+(R2*v_in));
-	data_temp.motor_control_coolant_temp.F32 = (3435.0)/(log((r_th/0.0991912))) - 273.15;
-
-	v_in = 3.3*(A0RESULT/4096.0);
-	r_th = -1.0*(R1*R2*v_in)/((-1.0*R2*V5)+(R1*v_in)+(R2*v_in));
-	data_temp.radiator_coolant_temp.F32 = (3435.0)/(log((r_th/0.0991912))) - 273.15;
-
-	v_in = 3.3*(B1RESULT/4096.0);
-	r_th = -1.0*(R1*R2*v_in)/((-1.0*R2*V5)+(R1*v_in)+(R2*v_in));
-	data_temp.motor_plate_temp_1.F32 = (3380.0)/(log((r_th/0.119286))) - 273.15;
-
-	v_in = 3.3*(A1RESULT/4096.0);
-	r_th = -1.0*(R1*R2*v_in)/((-1.0*R2*V5)+(R1*v_in)+(R2*v_in));
-	data_temp.motor_plate_temp_2.F32 = (3380.0)/(log((r_th/0.119286))) - 273.15;
-
-	v_in = 3.3*(B4RESULT/4096.0);
-	r_th = -1.0*(R1*R2*v_in)/((-1.0*R2*V5)+(R1*v_in)+(R2*v_in));
-	data_temp.ambient_temp.F32 = (3380.0)/(log((r_th/0.119286))) - 273.15;
-
-	data_temp.motor_temp.F32 = (pow((B3RESULT/4096.0),2)*2380.13) + ((B3RESULT/4096.0)*940.533) - 232.125;
-
-	v_in = 3.3*(A7RESULT/4096.0);
-	data_temp.coolant_pressure_1.F32 = (37.5/V5)*(1.56*v_in) - 3.75;
-
-	v_in = 3.3*(A3RESULT/4096.0);
-	data_temp.coolant_pressure_2.F32 = (37.5/V5)*(1.56*v_in) - 3.75;
-
-	data_temp.gp_button = READGPBUTTON();
-	/*
-	if(A7RESULT > max)
-	{
-		max = A7RESULT;
-	}
-	if(A7RESULT < min)
-	{
-		min = A7RESULT;
-	}
-	*/
 	PerformSystemChecks();
 }
 

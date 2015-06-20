@@ -15,6 +15,8 @@ void LatchStruct();
 void UpdateStruct();
 void SensorCovDeInit();
 
+void ConfigDAC();
+
 #define FULL_SCALE 		(4096*0.9)
 
 #define SENSOR_COV_STOPWATCH 100000

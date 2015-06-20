@@ -26,6 +26,7 @@
 #include "common_template.h"
 #include "main.h"
 #include "clock.h"
+#include "sound.h"
 #include "clock_template.h"
 #include "can.h"
 #include <stdlib.h>

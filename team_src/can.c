@@ -36,14 +36,16 @@ void CANSetup()
 	//gp_button TRANSMIT
 	//CreateCANMailbox(3,0,0,1,8,GP_BUTTON_ID,0);
 
-	CreateCANMailbox(COOLANT_FLOW_BOX,0,0,1,4,COOLANT_FLOW_ID,0); //CHECK AAM
-	CreateCANMailbox(MOTOR_TEMP_BOX,0,0,1,4,MOTOR_TEMP_ID,0);
-	CreateCANMailbox(MOTOR_CONT_TEMP_BOX,0,0,1,4,MOTOR_CONT_TEMP_ID, 0);
-	CreateCANMailbox(RADIATOR_TEMP_BOX,0,0,1,4,RADIATOR_TEMP_ID,0);
-	CreateCANMailbox(COOLANT_PRESSURES_BOX,0,0,1,8,COOLANT_PRESSURES_ID,0);
-	CreateCANMailbox(EMRAX_TEMP_BOX,0,0,1,4,EMRAX_TEMP_ID,0);
-	CreateCANMailbox(AMBIENT_TEMP_BOX,0,0,1,4,AMBIENT_TEMP_ID,0);
-	CreateCANMailbox(MOTOR_PLATE_TEMP_BOX,0,0,1,8,MOTOR_PLATE_TEMP_ID,0);
+	//Cell Temp 1 receive
+	ECanaMboxes.MBOX2.MSGID.bit.IDE = 0; 	//standard id
+	ECanaMboxes.MBOX2.MSGID.bit.AME = 0;	// all bit must match
+	ECanaMboxes.MBOX2.MSGID.bit.AAM = 0; 	// no RTR AUTO TRANSMIT
+	ECanaMboxes.MBOX2.MSGCTRL.bit.DLC = 8;
+	ECanaMboxes.MBOX2.MSGID.bit.STDMSGID = MOTOR_VELOCITY_ID;
+	ECanaShadow.CANMD.bit.MD5 = 1;			//receive
+	ECanaShadow.CANME.bit.ME5 = 1;			//enable
+	ECanaShadow.CANMIM.bit.MIM5  = 1; 		//int enable
+	ECanaShadow.CANMIL.bit.MIL5  = 1;  		// Int.-Level MB#0  -> I1EN
 
     EDIS;
     FinishCANInit();
@@ -60,30 +62,6 @@ char FillCAN(unsigned int Mbox)
 		//InsertCANMessage(int Mbox, unsigned int MDH, unsigned int MDL)
 		switch (Mbox)
 		{
-		case COOLANT_FLOW_BOX:
-			InsertCANMessage(COOLANT_FLOW_BOX, 0, user_data.coolant_flow.U32);
-			return 1;
-		case MOTOR_TEMP_BOX:
-			InsertCANMessage(MOTOR_TEMP_BOX, user_data.motor_coolant_temp.U32, user_data.motor_coolant_temp.U32);
-			return 1;
-		case MOTOR_CONT_TEMP_BOX:
-			InsertCANMessage(MOTOR_CONT_TEMP_BOX, user_data.motor_control_coolant_temp.U32, user_data.motor_control_coolant_temp.U32);
-			return 1;
-		case RADIATOR_TEMP_BOX:
-			InsertCANMessage(RADIATOR_TEMP_BOX, user_data.radiator_coolant_temp.U32, user_data.radiator_coolant_temp.U32);
-			return 1;
-		case COOLANT_PRESSURES_BOX:
-			InsertCANMessage(COOLANT_PRESSURES_BOX, user_data.coolant_pressure_2.U32, user_data.coolant_pressure_1.U32);
-			return 1;
-		case EMRAX_TEMP_BOX:
-			InsertCANMessage(EMRAX_TEMP_BOX, 0, user_data.motor_temp.U32);
-			return 1;
-		case AMBIENT_TEMP_BOX:
-			InsertCANMessage(AMBIENT_TEMP_BOX, 0, user_data.ambient_temp.U32);
-			return 1;
-		case MOTOR_PLATE_TEMP_BOX:
-			InsertCANMessage(MOTOR_PLATE_TEMP_BOX, user_data.motor_plate_temp_2.U32, user_data.motor_plate_temp_1.U32);
-			return 1;
 		default:
 			return 0;
 		}
@@ -97,14 +75,6 @@ char FillCAN(unsigned int Mbox)
 void FillCANData()
 {
 	//todo USER: use FillCAN to put data into correct mailboxes
-	FillCAN(COOLANT_FLOW_BOX);
-	FillCAN(MOTOR_TEMP_BOX);
-	FillCAN(MOTOR_CONT_TEMP_BOX);
-	FillCAN(RADIATOR_TEMP_BOX);
-	FillCAN(COOLANT_PRESSURES_BOX);
-	FillCAN(EMRAX_TEMP_BOX);
-	FillCAN(AMBIENT_TEMP_BOX);
-	FillCAN(MOTOR_PLATE_TEMP_BOX);
 }
 
 // INT9.6
@@ -118,6 +88,10 @@ __interrupt void ECAN1INTA_ISR(void)  // eCAN-A
   	if(mailbox_nr == COMMAND_BOX)
   	{
   		ReadCommand();
+  	}
+  	else if(mailbox_nr == MOTOR_VELOCITY_BOX)
+  	{
+  		user_data.MotorVelocity.U32 = ECanaMboxes.MBOX2.MDL.all;
   	}
   	//todo USER: Setup other reads
 
