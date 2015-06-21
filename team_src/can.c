@@ -37,15 +37,11 @@ void CANSetup()
 	//CreateCANMailbox(3,0,0,1,8,GP_BUTTON_ID,0);
 
 	//Cell Temp 1 receive
-	ECanaMboxes.MBOX2.MSGID.bit.IDE = 0; 	//standard id
-	ECanaMboxes.MBOX2.MSGID.bit.AME = 0;	// all bit must match
-	ECanaMboxes.MBOX2.MSGID.bit.AAM = 0; 	// no RTR AUTO TRANSMIT
-	ECanaMboxes.MBOX2.MSGCTRL.bit.DLC = 8;
-	ECanaMboxes.MBOX2.MSGID.bit.STDMSGID = MOTOR_VELOCITY_ID;
-	ECanaShadow.CANMD.bit.MD5 = 1;			//receive
-	ECanaShadow.CANME.bit.ME5 = 1;			//enable
-	ECanaShadow.CANMIM.bit.MIM5  = 1; 		//int enable
-	ECanaShadow.CANMIL.bit.MIL5  = 1;  		// Int.-Level MB#0  -> I1EN
+	CreateCANMailbox(MOTOR_VELOCITY_BOX,0,0,1,8,MOTOR_VELOCITY_ID,1);
+	ECanaShadow.CANMD.bit.MD2 = 1;			//receive
+	ECanaShadow.CANME.bit.ME2 = 1;			//enable
+	ECanaShadow.CANMIM.bit.MIM2  = 1; 		//int enable
+	ECanaShadow.CANMIL.bit.MIL2  = 1;  		// Int.-Level MB#0  -> I1EN
 
     EDIS;
     FinishCANInit();
@@ -92,6 +88,7 @@ __interrupt void ECAN1INTA_ISR(void)  // eCAN-A
   	else if(mailbox_nr == MOTOR_VELOCITY_BOX)
   	{
   		user_data.MotorVelocity.U32 = ECanaMboxes.MBOX2.MDL.all;
+  		ECanaRegs.CANRMP.bit.RMP2 = 1;
   	}
   	//todo USER: Setup other reads
 

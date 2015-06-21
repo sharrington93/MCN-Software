@@ -117,6 +117,10 @@ void PrepareNextSound()
 		i++;
 	}
 	index++;
+	if(index >= 41384)
+	{
+		index = 0;
+	}
 }
 
 void SendNextSound()

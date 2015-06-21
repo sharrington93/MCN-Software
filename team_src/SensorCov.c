@@ -50,6 +50,7 @@ void SensorCovInit()
 {
 	//todo USER: SensorCovInit()
 	SystemSensorInit(SENSOR_COV_STOPWATCH);
+	/*
 	initDSPfilter(&A0filter, ALPHA_SYS);
 	initDSPfilter(&A1filter, ALPHA_SYS);
 	initDSPfilter(&A2filter, ALPHA_SYS);
@@ -68,7 +69,7 @@ void SensorCovInit()
 	initDSPfilter(&B7filter, ALPHA_SYS);
 	ConfigGPIOSensor(410, 10000, 26, 0, 2);
 	ConfigGPIOSensor(410, 10000, 19, 0, 2);
-
+	*/
 	ConfigDAC();
 }
 
