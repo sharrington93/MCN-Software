@@ -14,7 +14,7 @@ void SensorCovMeasure();
 void LatchStruct();
 void UpdateStruct();
 void SensorCovDeInit();
-
+void EnablePWM4();
 void ConfigDAC();
 
 #define FULL_SCALE 		(4096*0.9)

@@ -406,19 +406,7 @@ __interrupt void EPWM3_INT_ISR(void)    // EPWM-3
   for(;;);
 }
 
-// INT3.4
-__interrupt void EPWM4_INT_ISR(void)    // EPWM-4
-{
-  // Insert ISR Code here
 
-  // To receive more interrupts from this PIE group, acknowledge this interrupt
-  // PieCtrlRegs.PIEACK.all = PIEACK_GROUP3;
-
-  // Next two lines for debug only to halt the processor here
-  // Remove after inserting ISR Code
-  __asm ("      ESTOP0");
-  for(;;);
-}
 
 // INT3.5
 __interrupt void EPWM5_INT_ISR(void)    // EPWM-5

@@ -33,6 +33,10 @@ int max = 2000, min = 2000;
 float r_th;
 float v_in;
 
+unsigned int index = 0;
+unsigned short nextSound;
+int speed;
+
 void SensorCov()
 {
 	SensorCovInit(4);
@@ -70,7 +74,28 @@ void SensorCovInit()
 	ConfigGPIOSensor(410, 10000, 26, 0, 2);
 	ConfigGPIOSensor(410, 10000, 19, 0, 2);
 	*/
+	EnablePWM4();
 	ConfigDAC();
+}
+
+void EnablePWM4()
+{
+	// Assumes ePWM2 clock is already enabled in InitSysCtrl();
+	EPwm4Regs.ETSEL.bit.SOCAEN	= 1;		// Enable SOC on A group
+	EPwm4Regs.ETSEL.bit.SOCASEL	= 4;		// Select SOC from CPMA on upcount
+	EPwm4Regs.ETPS.bit.SOCAPRD 	= 1;		// Generate pulse on 1st event
+
+
+	EPwm4Regs.ETSEL.bit.INTEN = 1;			// Generate PWM2 Interrupt
+	EPwm4Regs.ETSEL.bit.INTSEL = 4;			// Toggle interrupt from CPMA on upcount
+	EPwm4Regs.ETPS.bit.INTPRD = 1;			// Toggle interrupt on 1st event
+
+	EPwm4Regs.CMPA.half.CMPA 	= 0x0BB7;	// Set compare A value
+	EPwm4Regs.TBPRD 			= 0x0BB7;	// Set period for ePWM2
+	EPwm4Regs.TBCTL.bit.CTRMODE	= 0;		// count up and start
+	//EPwm1Regs.TBCTL.bit.HSPCLKDIV = TB_DIV1;
+
+	PieCtrlRegs.PIEIER3.bit.INTx4 = 1;
 }
 
 void ConfigDAC()
@@ -195,4 +220,128 @@ void SensorCovDeInit()
 {
 	//todo USER: SensorCovDeInit()
 	SystemSensorDeInit();
+}
+
+
+void PrepareNextSound()
+{
+	int i = 0;
+	nextSound = soundFile[index];
+	while(i < 12)
+	{
+		int temp = (nextSound & (1 << i));
+		temp = temp >> (i);
+		if((nextSound & (1 << i)) >> (i) == 0)
+		{
+			switch(i)
+			{
+			case 0:
+				GpioDataRegs.GPACLEAR.bit.GPIO6 = 1;
+				break;
+			case 1:
+				GpioDataRegs.GPBCLEAR.bit.GPIO41 = 1;
+				break;
+			case 2:
+				GpioDataRegs.GPACLEAR.bit.GPIO16 = 1;
+				break;
+			case 3:
+				GpioDataRegs.GPBCLEAR.bit.GPIO44 = 1;
+				break;
+			case 4:
+				GpioDataRegs.GPACLEAR.bit.GPIO25 = 1;
+				break;
+			case 5:
+				GpioDataRegs.GPACLEAR.bit.GPIO8 = 1;
+				break;
+			case 6:
+				GpioDataRegs.GPACLEAR.bit.GPIO17 = 1;
+				break;
+			case 7:
+				GpioDataRegs.GPACLEAR.bit.GPIO18 = 1;
+				break;
+			case 8:
+				GpioDataRegs.GPACLEAR.bit.GPIO5 = 1;
+				break;
+			case 9:
+				GpioDataRegs.GPACLEAR.bit.GPIO9 = 1;
+				break;
+			case 10:
+				GpioDataRegs.GPACLEAR.bit.GPIO11 = 1;
+				break;
+			case 11:
+				GpioDataRegs.GPACLEAR.bit.GPIO20 = 1;
+				break;
+			default:
+				break;
+			}
+		}
+		else
+		{
+			switch(i)
+			{
+			case 0:
+				GpioDataRegs.GPASET.bit.GPIO6 = 1;
+				break;
+			case 1:
+				GpioDataRegs.GPBSET.bit.GPIO41 = 1;
+				break;
+			case 2:
+				GpioDataRegs.GPASET.bit.GPIO16 = 1;
+				break;
+			case 3:
+				GpioDataRegs.GPBSET.bit.GPIO44 = 1;
+				break;
+			case 4:
+				GpioDataRegs.GPASET.bit.GPIO25 = 1;
+				break;
+			case 5:
+				GpioDataRegs.GPASET.bit.GPIO8 = 1;
+				break;
+			case 6:
+				GpioDataRegs.GPASET.bit.GPIO17 = 1;
+				break;
+			case 7:
+				GpioDataRegs.GPASET.bit.GPIO18 = 1;
+				break;
+			case 8:
+				GpioDataRegs.GPASET.bit.GPIO5 = 1;
+				break;
+			case 9:
+				GpioDataRegs.GPASET.bit.GPIO9 = 1;
+				break;
+			case 10:
+				GpioDataRegs.GPASET.bit.GPIO11 = 1;
+				break;
+			case 11:
+				GpioDataRegs.GPASET.bit.GPIO20 = 1;
+				break;
+			default:
+				break;
+			}
+		}
+		i++;
+	}
+	index++;
+	if(index >= 41384)
+	{
+		index = 0;
+	}
+}
+
+void SendNextSound()
+{
+	GpioDataRegs.GPACLEAR.bit.GPIO0 = 1; // Toggle CS low
+	GpioDataRegs.GPASET.bit.GPIO0 = 1; // Toggle CS back high after ~16 ns
+}
+
+
+// INT3.4
+__interrupt void EPWM4_INT_ISR(void)    // EPWM-4
+{
+  // Insert ISR Code here
+  PrepareNextSound();
+  SendNextSound();
+  EPwm4Regs.ETCLR.bit.INT = 1;
+  // To receive more interrupts from this PIE group, acknowledge this interrupt
+  PieCtrlRegs.PIEACK.all = PIEACK_GROUP3;
 }

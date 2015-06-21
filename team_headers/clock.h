@@ -11,7 +11,7 @@
 void ClockSetup();
 
 //todo USER: define clock
-#define CLOCK_PERIOD 1 //uS //thousandth of a second
+#define CLOCK_PERIOD 1000 //uS //thousandth of a second
 
 #define EIGHT_THOUSAND_HZ		125	//8 kHz
 #define NINE_THOUSAND_HZ		111 	//9 kHz
