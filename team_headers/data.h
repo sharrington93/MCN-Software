@@ -16,16 +16,37 @@ typedef union CANFLOAT
 
 typedef struct USER_DATA
 {
-	canfloat coolant_flow;
-	canfloat motor_coolant_temp;
-	canfloat motor_control_coolant_temp;
-	canfloat radiator_coolant_temp;
-	canfloat coolant_pressure_1;
-	canfloat coolant_pressure_2;
-	canfloat motor_plate_temp_1;
-	canfloat motor_plate_temp_2;
-	canfloat ambient_temp;
-	canfloat motor_temp;
+	canfloat CellTemp1;
+	canfloat CellTemp2;
+	canfloat CellTemp3;
+	canfloat CellTemp4;
+	canfloat CellTemp5;
+	canfloat CellTemp6;
+	canfloat CellTemp7;
+	canfloat CellTemp8;
+	canfloat CellTemp9;
+	canfloat CellTemp10;
+	canfloat CellTemp11;
+	canfloat CellTemp12;
+	canfloat CellTemp13;
+	canfloat CellTemp14;
+	canfloat CellTemp15;
+	canfloat CellTemp16;
+	canfloat CellTemp17;
+	canfloat CellTemp18;
+	canfloat BIM1;
+	canfloat BIM2;
+	canfloat BIM3;
+	canfloat BIM4;
+	canfloat BIM5;
+	canfloat throttle_percent;
+	canfloat RPM;
+	canfloat max_cell_temp;
+	canfloat battery_limit;
+	canfloat rpm_limit;
+	canfloat status_limit;
+	canfloat throttle_lock;
+	canfloat driver_control_limits;
 	char gp_button;
 } user_data_struct;
 

@@ -36,14 +36,33 @@ void CANSetup()
 	//gp_button TRANSMIT
 	//CreateCANMailbox(3,0,0,1,8,GP_BUTTON_ID,0);
 
-	CreateCANMailbox(COOLANT_FLOW_BOX,0,0,1,4,COOLANT_FLOW_ID,0); //CHECK AAM
-	CreateCANMailbox(MOTOR_TEMP_BOX,0,0,1,4,MOTOR_TEMP_ID,0);
-	CreateCANMailbox(MOTOR_CONT_TEMP_BOX,0,0,1,4,MOTOR_CONT_TEMP_ID, 0);
-	CreateCANMailbox(RADIATOR_TEMP_BOX,0,0,1,4,RADIATOR_TEMP_ID,0);
-	CreateCANMailbox(COOLANT_PRESSURES_BOX,0,0,1,8,COOLANT_PRESSURES_ID,0);
-	CreateCANMailbox(EMRAX_TEMP_BOX,0,0,1,4,EMRAX_TEMP_ID,0);
-	CreateCANMailbox(AMBIENT_TEMP_BOX,0,0,1,4,AMBIENT_TEMP_ID,0);
-	CreateCANMailbox(MOTOR_PLATE_TEMP_BOX,0,0,1,8,MOTOR_PLATE_TEMP_ID,0);
+
+	CreateCANMailbox(CellTemp1_BOX, 0, 0, 1, 8, CellTemp1_ID, 1);
+	CreateCANMailbox(CellTemp2_BOX, 0, 0, 1, 8, CellTemp2_ID, 1);
+	CreateCANMailbox(CellTemp3_BOX, 0, 0, 1, 8, CellTemp3_ID, 1);
+	CreateCANMailbox(CellTemp4_BOX, 0, 0, 1, 4, CellTemp4_ID, 1);
+	CreateCANMailbox(CellTemp5_BOX, 0, 0, 1, 8, CellTemp5_ID, 1);
+	CreateCANMailbox(CellTemp6_BOX, 0, 0, 1, 8, CellTemp6_ID, 1);
+	CreateCANMailbox(CellTemp7_BOX, 0, 0, 1, 8, CellTemp7_ID, 1);
+	CreateCANMailbox(CellTemp8_BOX, 0, 0, 1, 8, CellTemp8_ID, 1);
+	CreateCANMailbox(CellTemp9_BOX, 0, 0, 1, 8, CellTemp9_ID, 1);
+	CreateCANMailbox(CellTemp10_BOX, 0, 0, 1, 8, CellTemp10_ID, 1);
+	CreateCANMailbox(CellTemp11_BOX, 0, 0, 1, 8, CellTemp11_ID, 1);
+	CreateCANMailbox(CellTemp12_BOX, 0, 0, 1, 4, CellTemp12_ID, 1);
+	CreateCANMailbox(CellTemp13_BOX, 0, 0, 1, 8, CellTemp13_ID, 1);
+	CreateCANMailbox(CellTemp14_BOX, 0, 0, 1, 8, CellTemp14_ID, 1);
+	CreateCANMailbox(CellTemp15_BOX, 0, 0, 1, 8, CellTemp15_ID, 1);
+	CreateCANMailbox(CellTemp16_BOX, 0, 0, 1, 8, CellTemp16_ID, 1);
+	CreateCANMailbox(CellTemp17_BOX, 0, 0, 1, 8, CellTemp17_ID, 1);
+	CreateCANMailbox(CellTemp18_BOX, 0, 0, 1, 8, CellTemp18_ID, 1);
+	CreateCANMailbox(RPM_BOX, 0, 0, 1, 8, RPM_ID, 1);
+	CreateCANMailbox(BIM1_BOX, 0, 0 , 1, 8, BIM1_ID, 1);
+	CreateCANMailbox(BIM2_BOX, 0, 0 , 1, 8, BIM2_ID, 1);
+	CreateCANMailbox(BIM3_BOX, 0, 0 , 1, 8, BIM3_ID, 1);
+	CreateCANMailbox(BIM4_BOX, 0, 0 , 1, 8, BIM4_ID, 1);
+	CreateCANMailbox(BIM5_BOX, 0, 0 , 1, 8, BIM5_ID, 1);
+
+
 
     EDIS;
     FinishCANInit();
@@ -60,30 +79,10 @@ char FillCAN(unsigned int Mbox)
 		//InsertCANMessage(int Mbox, unsigned int MDH, unsigned int MDL)
 		switch (Mbox)
 		{
-		case COOLANT_FLOW_BOX:
-			InsertCANMessage(COOLANT_FLOW_BOX, 0, user_data.coolant_flow.U32);
-			return 1;
-		case MOTOR_TEMP_BOX:
-			InsertCANMessage(MOTOR_TEMP_BOX, user_data.motor_coolant_temp.U32, user_data.motor_coolant_temp.U32);
-			return 1;
-		case MOTOR_CONT_TEMP_BOX:
-			InsertCANMessage(MOTOR_CONT_TEMP_BOX, user_data.motor_control_coolant_temp.U32, user_data.motor_control_coolant_temp.U32);
-			return 1;
-		case RADIATOR_TEMP_BOX:
-			InsertCANMessage(RADIATOR_TEMP_BOX, user_data.radiator_coolant_temp.U32, user_data.radiator_coolant_temp.U32);
-			return 1;
-		case COOLANT_PRESSURES_BOX:
-			InsertCANMessage(COOLANT_PRESSURES_BOX, user_data.coolant_pressure_2.U32, user_data.coolant_pressure_1.U32);
-			return 1;
-		case EMRAX_TEMP_BOX:
-			InsertCANMessage(EMRAX_TEMP_BOX, 0, user_data.motor_temp.U32);
-			return 1;
-		case AMBIENT_TEMP_BOX:
-			InsertCANMessage(AMBIENT_TEMP_BOX, 0, user_data.ambient_temp.U32);
-			return 1;
-		case MOTOR_PLATE_TEMP_BOX:
-			InsertCANMessage(MOTOR_PLATE_TEMP_BOX, user_data.motor_plate_temp_2.U32, user_data.motor_plate_temp_1.U32);
-			return 1;
+		case DriverControl_BOX:
+			InsertCANMessage(DriverControl_BOX, user_data.driver_control_limits.U32, user_data.driver_control_limits.U32);
+		case DriverThrottle_BOX:
+			InsertCANMessage(DriverThrottle_BOX, user_data.throttle_percent.U32, user_data.throttle_percent.U32);
 		default:
 			return 0;
 		}
@@ -97,14 +96,32 @@ char FillCAN(unsigned int Mbox)
 void FillCANData()
 {
 	//todo USER: use FillCAN to put data into correct mailboxes
-	FillCAN(COOLANT_FLOW_BOX);
-	FillCAN(MOTOR_TEMP_BOX);
-	FillCAN(MOTOR_CONT_TEMP_BOX);
-	FillCAN(RADIATOR_TEMP_BOX);
-	FillCAN(COOLANT_PRESSURES_BOX);
-	FillCAN(EMRAX_TEMP_BOX);
-	FillCAN(AMBIENT_TEMP_BOX);
-	FillCAN(MOTOR_PLATE_TEMP_BOX);
+	FillCAN(CellTemp1_BOX);
+	FillCAN(CellTemp2_BOX);
+	FillCAN(CellTemp3_BOX);
+	FillCAN(CellTemp4_BOX);
+	FillCAN(CellTemp5_BOX);
+	FillCAN(CellTemp6_BOX);
+	FillCAN(CellTemp7_BOX);
+	FillCAN(CellTemp8_BOX);
+	FillCAN(CellTemp9_BOX);
+	FillCAN(CellTemp10_BOX);
+	FillCAN(CellTemp11_BOX);
+	FillCAN(CellTemp12_BOX);
+	FillCAN(CellTemp13_BOX);
+	FillCAN(CellTemp14_BOX);
+	FillCAN(CellTemp15_BOX);
+	FillCAN(CellTemp16_BOX);
+	FillCAN(CellTemp17_BOX);
+	FillCAN(CellTemp18_BOX);
+	FillCAN(BIM1_BOX);
+	FillCAN(BIM2_BOX);
+	FillCAN(BIM3_BOX);
+	FillCAN(BIM4_BOX);
+	FillCAN(BIM5_BOX);
+	FillCAN(DriverControl_BOX);
+	FillCAN(DriverThrottle_BOX);
+	FillCAN(RPM_BOX);
 }
 
 // INT9.6
@@ -115,9 +132,59 @@ __interrupt void ECAN1INTA_ISR(void)  // eCAN-A
   	unsigned int mailbox_nr;
   	mailbox_nr = getMailboxNR();
   	//todo USER: Setup ops command
-  	if(mailbox_nr == COMMAND_BOX)
+  	//CAN RECEIVE
+  	switch (mailbox_nr)
   	{
+  	case COMMAND_BOX:
   		ReadCommand();
+  	case CellTemp1_BOX:
+  		user_data.CellTemp1.U32 = ECanaMboxes.MBOX2.MDL.all;
+  	case CellTemp2_BOX:
+  	  	user_data.CellTemp2.U32 = ECanaMboxes.MBOX3.MDL.all;
+  	case CellTemp3_BOX:
+  	  	user_data.CellTemp3.U32 = ECanaMboxes.MBOX4.MDL.all;
+  	case CellTemp4_BOX:
+  	  	user_data.CellTemp4.U32 = ECanaMboxes.MBOX5.MDL.all;
+  	case CellTemp5_BOX:
+  	  	user_data.CellTemp5.U32 = ECanaMboxes.MBOX6.MDL.all;
+  	case CellTemp6_BOX:
+  	  	user_data.CellTemp6.U32 = ECanaMboxes.MBOX7.MDL.all;
+  	case CellTemp7_BOX:
+  	  	user_data.CellTemp7.U32 = ECanaMboxes.MBOX8.MDL.all;
+  	case CellTemp8_BOX:
+  	  	user_data.CellTemp8.U32 = ECanaMboxes.MBOX9.MDL.all;
+  	case CellTemp9_BOX:
+  	  	user_data.CellTemp9.U32 = ECanaMboxes.MBOX10.MDL.all;
+  	case CellTemp10_BOX:
+  	  	user_data.CellTemp10.U32 = ECanaMboxes.MBOX11.MDL.all;
+  	case CellTemp11_BOX:
+  	  	user_data.CellTemp11.U32 = ECanaMboxes.MBOX12.MDL.all;
+  	case CellTemp12_BOX:
+  	  	user_data.CellTemp12.U32 = ECanaMboxes.MBOX13.MDL.all;
+  	case CellTemp13_BOX:
+  	  	user_data.CellTemp13.U32 = ECanaMboxes.MBOX14.MDL.all;
+  	case CellTemp14_BOX:
+  	  	user_data.CellTemp14.U32 = ECanaMboxes.MBOX15.MDL.all;
+  	case CellTemp15_BOX:
+  	  	user_data.CellTemp15.U32 = ECanaMboxes.MBOX16.MDL.all;
+  	case CellTemp16_BOX:
+  	  	user_data.CellTemp16.U32 = ECanaMboxes.MBOX17.MDL.all;
+  	case CellTemp17_BOX:
+  	  	user_data.CellTemp17.U32 = ECanaMboxes.MBOX18.MDL.all;
+  	case CellTemp18_BOX:
+  	  	user_data.CellTemp18.U32 = ECanaMboxes.MBOX19.MDL.all;
+  	case RPM_BOX:
+  		user_data.RPM.U32 = ECanaMboxes.MBOX20.MDL.all;
+  	case BIM1_BOX:
+  		user_data.BIM1.U32 = ECanaMboxes.MBOX21.MDL.all;
+  	case BIM2_BOX:
+  	  	user_data.BIM2.U32 = ECanaMboxes.MBOX22.MDL.all;
+  	case BIM3_BOX:
+  	  	user_data.BIM3.U32 = ECanaMboxes.MBOX23.MDL.all;
+  	case BIM4_BOX:
+  	  	user_data.BIM4.U32 = ECanaMboxes.MBOX24.MDL.all;
+  	case BIM5_BOX:
+  	  	user_data.BIM5.U32 = ECanaMboxes.MBOX25.MDL.all;
   	}
   	//todo USER: Setup other reads
 

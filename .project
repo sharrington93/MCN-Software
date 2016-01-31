@@ -38,7 +38,12 @@
 		<link>
 			<name>boot_template.obj</name>
 			<type>1</type>
-			<locationURI>WORKSPACE_LOC/MCN_Library/Debug/template_src/boot_template.obj</locationURI>
+			<locationURI>PARENT-1-PROJECT_LOC/MCN_Library/Debug/template_src/boot_template.obj</locationURI>
+		</link>
+		<link>
+			<name>gpio_template.obj</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/MCN_Library/Debug/template_src/gpio_template.obj</locationURI>
 		</link>
 	</linkedResources>
 	<variableList>

@@ -22,37 +22,110 @@ void BUS_OFF();
 #define COMMAND_ID 		0x3E8
 #define HEARTBEAT_ID 	0x3E7
 
-#define COOLANT_FLOW_ID 		0x3E2
-#define COOLANT_FLOW_BOX 		2
-#define COOLANT_FLOX_TRS 		TRS2
+#define CellTemp1_ID 		812
+#define CellTemp1_BOX 		2
+#define CellTemp1_TRS 		TRS2
 
-#define MOTOR_TEMP_ID			0x3E3
-#define MOTOR_TEMP_BOX			3
-#define MOTOR_TEMP_TRS			TRS3
+#define CellTemp2_ID 		813
+#define CellTemp2_BOX 		3
+#define CellTemp2_TRS 		TRS3
 
-#define MOTOR_CONT_TEMP_ID		0x3E4
-#define MOTOR_CONT_TEMP_BOX		4
-#define MOTOR_CONT_TEMP_TRS		TRS4
+#define CellTemp3_ID 		814
+#define CellTemp3_BOX 		4
+#define CellTemp3_TRS 		TRS4
 
-#define RADIATOR_TEMP_ID		0x3E5
-#define RADIATOR_TEMP_BOX		5
-#define RADIATOR_TEMP_TRS		TRS5
+#define CellTemp4_ID 		815
+#define CellTemp4_BOX 		5
+#define CellTemp4_TRS 		TRS5
 
-#define COOLANT_PRESSURES_ID		0x3E6
-#define COOLANT_PRESSURES_BOX	6
-#define COOLANT_PRESSURES_TRS	TRS6
+#define CellTemp5_ID 		816
+#define CellTemp5_BOX 		6
+#define CellTemp5_TRS 		TRS6
 
-#define EMRAX_TEMP_ID			0x3DF
-#define EMRAX_TEMP_BOX			7
-#define EMRAX_TEMP_TRS			TRS7
+#define CellTemp6_ID 		817
+#define CellTemp6_BOX 		7
+#define CellTemp6_TRS 		TRS7
 
-#define AMBIENT_TEMP_ID			0x3E0
-#define AMBIENT_TEMP_BOX		8
-#define AMBIENT_TEMP_TRS		TRS8
+#define CellTemp7_ID 		818
+#define CellTemp7_BOX 		8
+#define CellTemp7_TRS 		TRS8
 
-#define MOTOR_PLATE_TEMP_ID		0x3E1
-#define MOTOR_PLATE_TEMP_BOX	9
-#define MOTOR_PLATE_TEMP_TRS	TRS9
+#define CellTemp8_ID 		819
+#define CellTemp8_BOX 		9
+#define CellTemp8_TRS 		TRS9
+
+#define CellTemp9_ID 		820
+#define CellTemp9_BOX 		10
+#define CellTemp9_TRS 		TRS10
+
+#define CellTemp10_ID 		821
+#define CellTemp10_BOX 		11
+#define CellTemp10_TRS 		TRS11
+
+#define CellTemp11_ID 		822
+#define CellTemp11_BOX 		12
+#define CellTemp11_TRS 		TRS12
+
+#define CellTemp12_ID 		823
+#define CellTemp12_BOX 		13
+#define CellTemp12_TRS 		TRS13
+
+#define CellTemp13_ID 		824
+#define CellTemp13_BOX 		14
+#define CellTemp13_TRS 		TRS14
+
+#define CellTemp14_ID 		825
+#define CellTemp14_BOX 		15
+#define CellTemp14_TRS 		TRS15
+
+#define CellTemp15_ID 		826
+#define CellTemp15_BOX 		16
+#define CellTemp15_TRS 		TRS16
+
+#define CellTemp16_ID 		827
+#define CellTemp16_BOX 		17
+#define CellTemp16_TRS 		TRS17
+
+#define CellTemp17_ID 		828
+#define CellTemp17_BOX 		18
+#define CellTemp17_TRS 		TRS18
+
+#define CellTemp18_ID 		829
+#define CellTemp18_BOX 		19
+#define CellTemp18_TRS 		TRS19
+
+#define DriverControl_ID 	483
+#define DriverControl_BOX 	31
+#define DriverControl_TRS	TRS31
+
+#define DriverThrottle_ID 	484
+#define DriverThrottle_BOX 	28
+#define DriverThrottle_TRS 	TRS28
+
+#define RPM_ID 				1027
+#define RPM_BOX				20
+#define RPM_TRS				TRS20
+
+#define BIM1_ID				832
+#define BIM1_BOX			21
+#define BIM1_TRS			TRS21
+
+#define BIM2_ID          	833
+#define BIM2_BOX			22
+#define BIM2_TRS			TRS22
+
+#define BIM3_ID				834
+#define BIM3_BOX			23
+#define BIM3_TRS			TRS23
+
+#define BIM4_ID  			835
+#define BIM4_BOX			24
+#define BIM4_TRS			TRS24
+
+#define BIM5_ID				836
+#define BIM5_BOX			25
+#define BIM5_TRS			TRS25
+
 
 
 

@@ -35,10 +35,10 @@
 // locations within the memory map                                    */
 
 /* Uncomment this line to include file only for non-BIOS applications */
-/* -l DSP2803x_Headers_nonBIOS.cmd */
+// -l DSP2803x_Headers_nonBIOS.cmd
 
 /* Uncomment this line to include file only for BIOS applications */
-/* -l DSP2803x_Headers_BIOS.cmd */
+// -l DSP2803x_Headers_BIOS.cmd
 
 /* 2) In your project add the path to <base>\DSP2803x_headers\cmd to the
    library search path under project->build options, linker tab,
@@ -139,7 +139,7 @@ SECTIONS
 
 
    .bootloader_boot : {
-   boot_template.obj(.text)}                         > BOOTLOADER	   PAGE = 0
+   boot_template.obj(.text)}                        > BOOTLOADER	   PAGE = 0
    .bootloader_shared : {
    SharedBoot_template.obj(.text)}                  > BOOTLOADER	   PAGE = 0
 
