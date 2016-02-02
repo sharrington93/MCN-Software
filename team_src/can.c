@@ -37,30 +37,30 @@ void CANSetup()
 	//CreateCANMailbox(3,0,0,1,8,GP_BUTTON_ID,0);
 
 
-	CreateCANMailbox(CellTemp1_BOX, 0, 0, 1, 8, CellTemp1_ID, 1);
-	CreateCANMailbox(CellTemp2_BOX, 0, 0, 1, 8, CellTemp2_ID, 1);
-	CreateCANMailbox(CellTemp3_BOX, 0, 0, 1, 8, CellTemp3_ID, 1);
-	CreateCANMailbox(CellTemp4_BOX, 0, 0, 1, 4, CellTemp4_ID, 1);
-	CreateCANMailbox(CellTemp5_BOX, 0, 0, 1, 8, CellTemp5_ID, 1);
-	CreateCANMailbox(CellTemp6_BOX, 0, 0, 1, 8, CellTemp6_ID, 1);
-	CreateCANMailbox(CellTemp7_BOX, 0, 0, 1, 8, CellTemp7_ID, 1);
-	CreateCANMailbox(CellTemp8_BOX, 0, 0, 1, 8, CellTemp8_ID, 1);
-	CreateCANMailbox(CellTemp9_BOX, 0, 0, 1, 8, CellTemp9_ID, 1);
-	CreateCANMailbox(CellTemp10_BOX, 0, 0, 1, 8, CellTemp10_ID, 1);
-	CreateCANMailbox(CellTemp11_BOX, 0, 0, 1, 8, CellTemp11_ID, 1);
-	CreateCANMailbox(CellTemp12_BOX, 0, 0, 1, 4, CellTemp12_ID, 1);
-	CreateCANMailbox(CellTemp13_BOX, 0, 0, 1, 8, CellTemp13_ID, 1);
-	CreateCANMailbox(CellTemp14_BOX, 0, 0, 1, 8, CellTemp14_ID, 1);
-	CreateCANMailbox(CellTemp15_BOX, 0, 0, 1, 8, CellTemp15_ID, 1);
-	CreateCANMailbox(CellTemp16_BOX, 0, 0, 1, 8, CellTemp16_ID, 1);
-	CreateCANMailbox(CellTemp17_BOX, 0, 0, 1, 8, CellTemp17_ID, 1);
-	CreateCANMailbox(CellTemp18_BOX, 0, 0, 1, 8, CellTemp18_ID, 1);
-	CreateCANMailbox(RPM_BOX, 0, 0, 1, 8, RPM_ID, 1);
-	CreateCANMailbox(BIM1_BOX, 0, 0 , 1, 8, BIM1_ID, 1);
-	CreateCANMailbox(BIM2_BOX, 0, 0 , 1, 8, BIM2_ID, 1);
-	CreateCANMailbox(BIM3_BOX, 0, 0 , 1, 8, BIM3_ID, 1);
-	CreateCANMailbox(BIM4_BOX, 0, 0 , 1, 8, BIM4_ID, 1);
-	CreateCANMailbox(BIM5_BOX, 0, 0 , 1, 8, BIM5_ID, 1);
+	CreateCANMailbox(CellTemp1_BOX, 0, 0, 0, 8, CellTemp1_ID, 1);
+	CreateCANMailbox(CellTemp2_BOX, 0, 0, 0, 8, CellTemp2_ID, 1);
+	CreateCANMailbox(CellTemp3_BOX, 0, 0, 0, 8, CellTemp3_ID, 1);
+	CreateCANMailbox(CellTemp4_BOX, 0, 0, 0, 4, CellTemp4_ID, 1);
+	CreateCANMailbox(CellTemp5_BOX, 0, 0, 0, 8, CellTemp5_ID, 1);
+	CreateCANMailbox(CellTemp6_BOX, 0, 0, 0, 8, CellTemp6_ID, 1);
+	CreateCANMailbox(CellTemp7_BOX, 0, 0, 0, 8, CellTemp7_ID, 1);
+	CreateCANMailbox(CellTemp8_BOX, 0, 0, 0, 8, CellTemp8_ID, 1);
+	CreateCANMailbox(CellTemp9_BOX, 0, 0, 0, 8, CellTemp9_ID, 1);
+	CreateCANMailbox(CellTemp10_BOX, 0, 0, 0, 8, CellTemp10_ID, 1);
+	CreateCANMailbox(CellTemp11_BOX, 0, 0, 0, 8, CellTemp11_ID, 1);
+	CreateCANMailbox(CellTemp12_BOX, 0, 0, 0, 4, CellTemp12_ID, 1);
+	CreateCANMailbox(CellTemp13_BOX, 0, 0, 0, 8, CellTemp13_ID, 1);
+	CreateCANMailbox(CellTemp14_BOX, 0, 0, 0, 8, CellTemp14_ID, 1);
+	CreateCANMailbox(CellTemp15_BOX, 0, 0, 0, 8, CellTemp15_ID, 1);
+	CreateCANMailbox(CellTemp16_BOX, 0, 0, 0, 8, CellTemp16_ID, 1);
+	CreateCANMailbox(CellTemp17_BOX, 0, 0, 0, 8, CellTemp17_ID, 1);
+	CreateCANMailbox(CellTemp18_BOX, 0, 0, 0, 8, CellTemp18_ID, 1);
+	CreateCANMailbox(RPM_BOX, 0, 0, 0, 8, RPM_ID, 1);
+	CreateCANMailbox(BIM1_BOX, 0, 0 , 0, 8, BIM1_ID, 1);
+	CreateCANMailbox(BIM2_BOX, 0, 0 , 0, 8, BIM2_ID, 1);
+	CreateCANMailbox(BIM3_BOX, 0, 0 , 0, 8, BIM3_ID, 1);
+	CreateCANMailbox(BIM4_BOX, 0, 0 , 0, 8, BIM4_ID, 1);
+	CreateCANMailbox(BIM5_BOX, 0, 0 , 0, 8, BIM5_ID, 1);
 
 
 
