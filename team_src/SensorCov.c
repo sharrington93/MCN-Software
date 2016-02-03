@@ -50,12 +50,12 @@ static const int BAT_THROTTLE[32] = {100, 97, 94, 91, 88, 85, 82, 79,
 							   31, 28, 25, 20, 15, 10, 5, 0};
 
 //array storing the battery temperatures
-float BATT_CELL_TEMPS[18] = {user_data.CellTemp1.F32, user_data.CellTemp2.F32, user_data.CellTemp3.F32,
-		                     user_data.CellTemp4.F32, user_data.CellTemp5.F32, user_data.CellTemp6.F32,
-							 user_data.CellTemp7.F32, user_data.CellTemp8.F32, user_data.CellTemp9.F32,
-							 user_data.CellTemp10.F32, user_data.CellTemp11.F32, user_data.CellTemp12.F32,
-							 user_data.CellTemp13.F32, user_data.CellTemp14.F32, user_data.CellTemp15.F32,
-							 user_data.CellTemp16.F32, user_data.CellTemp17.F32, user_data.CellTemp18.F32};
+float* BATT_CELL_TEMPS[18] = {&user_data.CellTemp1.F32, &user_data.CellTemp2.F32, &user_data.CellTemp3.F32,
+		                     &user_data.CellTemp4.F32, &user_data.CellTemp5.F32, &user_data.CellTemp6.F32,
+							 &user_data.CellTemp7.F32, &user_data.CellTemp8.F32, &user_data.CellTemp9.F32,
+							 &user_data.CellTemp10.F32, &user_data.CellTemp11.F32, &user_data.CellTemp12.F32,
+							 &user_data.CellTemp13.F32, &user_data.CellTemp14.F32, &user_data.CellTemp15.F32,
+							 &user_data.CellTemp16.F32, &user_data.CellTemp17.F32, &user_data.CellTemp18.F32};
 
 void SensorCov()
 {
@@ -116,8 +116,8 @@ void SensorCovMeasure()
 
 	//loop looks through the battery temperature array and deterimines the maximum temperature
 	for (i = 0; i < 18; i++){
-		if (BATT_CELL_TEMPS[i] > user_data.max_cell_temp.F32){
-			user_data.max_cell_temp.F32 = BATT_CELL_TEMPS[i];
+		if (*BATT_CELL_TEMPS[i] > user_data.max_cell_temp.F32){
+			user_data.max_cell_temp.F32 = *BATT_CELL_TEMPS[i];
 		}
 	}
 
