@@ -94,6 +94,14 @@ void BUS_OFF();
 #define CellTemp18_BOX 		19
 #define CellTemp18_TRS 		TRS19
 
+#define CellTemp19_ID 		830
+#define CellTemp19_BOX 		20
+#define CellTemp19_TRS		TRS20
+
+#define CellTemp20_ID 		830
+#define CellTemp20_BOX 		21
+#define CellTemp20_TRS		TRS21
+
 #define DriverControl_ID 	483
 #define DriverControl_BOX 	31
 #define DriverControl_TRS	TRS31
@@ -103,27 +111,27 @@ void BUS_OFF();
 #define DriverThrottle_TRS 	TRS28
 
 #define RPM_ID 				1027
-#define RPM_BOX				20
+#define RPM_BOX				22
 #define RPM_TRS				TRS20
 
 #define BIM1_ID				832
-#define BIM1_BOX			21
+#define BIM1_BOX			23
 #define BIM1_TRS			TRS21
 
 #define BIM2_ID          	833
-#define BIM2_BOX			22
+#define BIM2_BOX			24
 #define BIM2_TRS			TRS22
 
 #define BIM3_ID				834
-#define BIM3_BOX			23
+#define BIM3_BOX			25
 #define BIM3_TRS			TRS23
 
 #define BIM4_ID  			835
-#define BIM4_BOX			24
+#define BIM4_BOX			26
 #define BIM4_TRS			TRS24
 
 #define BIM5_ID				836
-#define BIM5_BOX			25
+#define BIM5_BOX			27
 #define BIM5_TRS			TRS25
 
 

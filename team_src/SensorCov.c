@@ -31,6 +31,7 @@ user_data_struct data_temp;
 
 
 int max = 2000, min = 2000, i;
+int THROTTLE_LOOKUP = 0;
 float r_th;
 float throttle_ratio;
 int RPM_ratio = 0;
@@ -50,12 +51,20 @@ static const int BAT_THROTTLE[32] = {100, 97, 94, 91, 88, 85, 82, 79,
 							   31, 28, 25, 20, 15, 10, 5, 0};
 
 //array storing the battery temperatures
-float* BATT_CELL_TEMPS[18] = {&user_data.CellTemp1.F32, &user_data.CellTemp2.F32, &user_data.CellTemp3.F32,
+float* BATT_CELL_TEMPS[40] = {&user_data.CellTemp1.F32, &user_data.CellTemp2.F32, &user_data.CellTemp3.F32,
 		                     &user_data.CellTemp4.F32, &user_data.CellTemp5.F32, &user_data.CellTemp6.F32,
 							 &user_data.CellTemp7.F32, &user_data.CellTemp8.F32, &user_data.CellTemp9.F32,
 							 &user_data.CellTemp10.F32, &user_data.CellTemp11.F32, &user_data.CellTemp12.F32,
 							 &user_data.CellTemp13.F32, &user_data.CellTemp14.F32, &user_data.CellTemp15.F32,
-							 &user_data.CellTemp16.F32, &user_data.CellTemp17.F32, &user_data.CellTemp18.F32};
+							 &user_data.CellTemp16.F32, &user_data.CellTemp17.F32, &user_data.CellTemp18.F32,
+							 &user_data.CellTemp19.F32, &user_data.CellTemp20.F32, &user_data.CellTemp21.F32,
+							 &user_data.CellTemp22.F32, &user_data.CellTemp23.F32, &user_data.CellTemp24.F32,
+							 &user_data.CellTemp25.F32, &user_data.CellTemp26.F32, &user_data.CellTemp27.F32,
+							 &user_data.CellTemp28.F32, &user_data.CellTemp29.F32, &user_data.CellTemp30.F32,
+							 &user_data.CellTemp31.F32, &user_data.CellTemp32.F32, &user_data.CellTemp33.F32,
+							 &user_data.CellTemp34.F32, &user_data.CellTemp35.F32, &user_data.CellTemp36.F32,
+							 &user_data.CellTemp37.F32, &user_data.CellTemp38.F32, &user_data.CellTemp39.F32,
+							 &user_data.CellTemp40.F32,};
 
 void SensorCov()
 {
@@ -115,7 +124,8 @@ void SensorCovMeasure()
 
 
 	//loop looks through the battery temperature array and deterimines the maximum temperature
-	for (i = 0; i < 18; i++){
+	user_data.max_cell_temp.F32 = 0.0;
+	for (i = 0; i < 40; i++){
 		if (*BATT_CELL_TEMPS[i] > user_data.max_cell_temp.F32){
 			user_data.max_cell_temp.F32 = *BATT_CELL_TEMPS[i];
 		}
@@ -132,11 +142,11 @@ void SensorCovMeasure()
 
 	//lookup the corrosponding throttle percentage
 	if (THROTTLE_LOOKUP <= 69){
-		user_data.throttle_percent.U32 = BAT_THROTTLE[0];
+		user_data.throttle_percent.F32 = BAT_THROTTLE[0];
 	}
 	else {
 		//lookup corrosponding RPM
-		user_data.throttle_percent.U32 = BAT_THROTTLE[THROTTLE_LOOKUP-69];
+		user_data.throttle_percent.F32 = BAT_THROTTLE[THROTTLE_LOOKUP-69];
 	}
 
 	if ((user_data.RPM.U32 > 0) && (user_data.RPM.U32)){
