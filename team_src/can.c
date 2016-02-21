@@ -84,9 +84,9 @@ char FillCAN(unsigned int Mbox)
 		switch (Mbox)
 		{
 		case DriverControl_BOX:
-			InsertCANMessage(DriverControl_BOX, user_data.driver_control_limits.U32, user_data.driver_control_limits.U32);
+			InsertCANMessage(DriverControl_BOX, 0, user_data.driver_control_limits.U32);
 		case DriverThrottle_BOX:
-			InsertCANMessage(DriverThrottle_BOX, user_data.throttle_percent.U32, user_data.throttle_percent.U32);
+			InsertCANMessage(DriverThrottle_BOX, user_data.throttle_percent.U32, user_data.RPM.U32);
 		default:
 			return 0;
 		}
@@ -100,31 +100,6 @@ char FillCAN(unsigned int Mbox)
 void FillCANData()
 {
 	//todo USER: use FillCAN to put data into correct mailboxes
-	FillCAN(CellTemp1_BOX);
-	FillCAN(CellTemp2_BOX);
-	FillCAN(CellTemp3_BOX);
-	FillCAN(CellTemp4_BOX);
-	FillCAN(CellTemp5_BOX);
-	FillCAN(CellTemp6_BOX);
-	FillCAN(CellTemp7_BOX);
-	FillCAN(CellTemp8_BOX);
-	FillCAN(CellTemp9_BOX);
-	FillCAN(CellTemp10_BOX);
-	FillCAN(CellTemp11_BOX);
-	FillCAN(CellTemp12_BOX);
-	FillCAN(CellTemp13_BOX);
-	FillCAN(CellTemp14_BOX);
-	FillCAN(CellTemp15_BOX);
-	FillCAN(CellTemp16_BOX);
-	FillCAN(CellTemp17_BOX);
-	FillCAN(CellTemp18_BOX);
-	FillCAN(CellTemp19_BOX);
-	FillCAN(CellTemp20_BOX);
-	FillCAN(BIM1_BOX);
-	FillCAN(BIM2_BOX);
-	FillCAN(BIM3_BOX);
-	FillCAN(BIM4_BOX);
-	FillCAN(BIM5_BOX);
 	FillCAN(DriverControl_BOX);
 	FillCAN(DriverThrottle_BOX);
 	FillCAN(RPM_BOX);

@@ -29,12 +29,11 @@ extern DSPfilter GPIO26filter;
 user_ops_struct ops_temp;
 user_data_struct data_temp;
 
-
-int max = 2000, min = 2000, i;
+//initializing variables used in SensorCovInit
+int i = 0;
 int THROTTLE_LOOKUP = 0;
-float r_th;
-float throttle_ratio;
-int RPM_ratio = 0;
+float throttle_ratio = 0;
+int RPM_ratio = 100;
 
 //possible battery cell temperatures
 static const int BAT_THROTTLE_TEMP[100] = {-30, -29, -28, -27, -26, -25, -24, -23, -22, -21, -20,
@@ -50,7 +49,7 @@ static const int BAT_THROTTLE[32] = {100, 97, 94, 91, 88, 85, 82, 79,
 							   76, 73, 70, 67, 64, 61, 58, 55, 52, 49, 46, 43, 40, 37, 34,
 							   31, 28, 25, 20, 15, 10, 5, 0};
 
-//array storing the battery temperatures
+//pointer float array storing the battery temperatures
 float* BATT_CELL_TEMPS[40] = {&user_data.CellTemp1.F32, &user_data.CellTemp2.F32, &user_data.CellTemp3.F32,
 		                     &user_data.CellTemp4.F32, &user_data.CellTemp5.F32, &user_data.CellTemp6.F32,
 							 &user_data.CellTemp7.F32, &user_data.CellTemp8.F32, &user_data.CellTemp9.F32,
@@ -75,6 +74,7 @@ void SensorCov()
 		SensorCovMeasure();
 		UpdateStruct();
 		FillCANData();
+
 	}
 	SensorCovDeInit();
 }
@@ -110,11 +110,13 @@ void SensorCovMeasure()
 #define V5 5.08
 #define B 1568.583480 //Ohm
 
+	SensorCovSystemInit();
 	//initialize used variables
 	int THROTTLE_LOOKUP = 0;
 	int BIM_STATUS = 0;
 	float MinMax = 0.0;
 	throttle_ratio = (A7RESULT/4096.0) * 100;
+	user_data.RPM.F32 = 4000;
 
 	//*******************************************************************************************************
 	//*                                           TODO                                                      *
@@ -124,10 +126,11 @@ void SensorCovMeasure()
 
 
 	//loop looks through the battery temperature array and deterimines the maximum temperature
-	user_data.max_cell_temp.F32 = 0.0;
+	int MAX = 0;
 	for (i = 0; i < 40; i++){
-		if (*BATT_CELL_TEMPS[i] > user_data.max_cell_temp.F32){
+		if (*BATT_CELL_TEMPS[i] > MAX){
 			user_data.max_cell_temp.F32 = *BATT_CELL_TEMPS[i];
+			MAX = user_data.max_cell_temp.F32;
 		}
 	}
 
@@ -143,17 +146,15 @@ void SensorCovMeasure()
 	//lookup the corrosponding throttle percentage
 	if (THROTTLE_LOOKUP <= 69){
 		user_data.throttle_percent.F32 = BAT_THROTTLE[0];
+		user_data.throttle_percent.F32 = (float)(user_data.throttle_percent.F32) / 100;
 	}
 	else {
-		//lookup corrosponding RPM
+		//lookup corrosponding throttle percentage if the temperature gets too high
 		user_data.throttle_percent.F32 = BAT_THROTTLE[THROTTLE_LOOKUP-69];
+		user_data.throttle_percent.F32 = (float)(user_data.throttle_percent.F32) / 100;
 	}
 
-	if ((user_data.RPM.U32 > 0) && (user_data.RPM.U32)){
-		RPM_ratio = 100;
-	}
-
-	//Check for limmiting factor
+	//Check for limmiting factor (should always result in battery limit being activated)
 	if (throttle_ratio < RPM_ratio) {
 		MinMax = throttle_ratio;
 	}
@@ -163,84 +164,34 @@ void SensorCovMeasure()
 
 	// check if battery limmit is the limmiting factor
 	if (((throttle_ratio > 1) && (throttle_ratio < 101)) && (throttle_ratio == MinMax)){
-		user_data.battery_limit.U32 = 1;
+		user_data.battery_limit.F32 = 1;
 	}
 	//check if rpm is the limmiting factor
 	else if (((throttle_ratio > 1) && (throttle_ratio < 101)) && (RPM_ratio == MinMax)){
-	    user_data.rpm_limit.U32 = 1;
+	    user_data.rpm_limit.F32 = 1;
 	}
 
-	BIM_STATUS = user_data.BIM1.U32 + user_data.BIM2.U32 + user_data.BIM3.U32 + user_data.BIM4.U32 + user_data.BIM5.U32;
+	// checking BIM status
+	BIM_STATUS = user_data.BIM1.F32 + user_data.BIM2.F32 + user_data.BIM3.F32 + user_data.BIM4.F32 + user_data.BIM5.F32;
 
+	// activate status limmit if a certain value is reached
 	if (BIM_STATUS == 5){
-		user_data.status_limit.U32 = 1;
+		user_data.status_limit.F32 = 1;
 	}
 
 	//sending the driver control limmits information
 	int limits = 0;
 	limits += user_data.status_limit.U32 << 3;
-	limits += user_data.rpm_limit.U32 << 2;
-	limits += user_data.battery_limit.U32 << 1;
-	limits += user_data.throttle_lock.U32;
+	limits += user_data.throttle_lock.U32 << 2;
+	limits += user_data.rpm_limit.U32 << 1;
+	limits += user_data.battery_limit.U32;
 
-	ECanaMboxes.MBOX31.MDL.byte.BYTE0 = limits;
-	user_data.driver_control_limits.U32 = ECanaMboxes.MBOX31.MDL.byte.BYTE0;
+	user_data.driver_control_limits.F32 = limits;
 
-	int percent_out = 0;
-	percent_out += user_data.throttle_percent.U32 >> 24;
+	//int percent_out = 0;
+	//percent_out += user_data.throttle_percent.U32 >> 24;
 
-	ECanaMboxes.MBOX20.MDH.byte.BYTE4 = percent_out;
-	user_data.throttle_percent.U32 = ECanaMboxes.MBOX20.MDH.byte.BYTE4;
-
-	SensorCovSystemInit();
-
-	//todo USER: Sensor Conversion
-	//update data_temp and ops_temp
-	//use stopwatch to catch timeouts
-	//waiting should poll isStopWatchComplete() to catch timeout and throw StopWatchError
-
-
-	/*data_temp.coolant_flow.F32 = (GPIO26filter.filtered_value*0.283);
-
-	data_temp.motor_coolant_temp.F32 = 70.0*(A4RESULT/4096.0);
-	data_temp.motor_control_coolant_temp.F32 = (140.0*(A5RESULT/4096.0)) - 50;
-	data_temp.radiator_coolant_temp.F32 = (140.0*(A0RESULT/4096.0)) - 50;
-	*/
-
-	/*v_in = 3.3*(A4RESULT/4096.0);
-	r_th = -1.0*(R1*R2*v_in)/((-1.0*R2*V5)+(R1*v_in)+(R2*v_in));
-	data_temp.motor_coolant_temp.F32 = (3435.0)/(log((r_th/0.0991912))) - 273.15;
-
-	v_in = 3.3*(A5RESULT/4096.0);
-	r_th = -1.0*(R1*R2*v_in)/((-1.0*R2*V5)+(R1*v_in)+(R2*v_in));
-	data_temp.motor_control_coolant_temp.F32 = (3435.0)/(log((r_th/0.0991912))) - 273.15;
-
-	v_in = 3.3*(A0RESULT/4096.0);
-	r_th = -1.0*(R1*R2*v_in)/((-1.0*R2*V5)+(R1*v_in)+(R2*v_in));
-	data_temp.radiator_coolant_temp.F32 = (3435.0)/(log((r_th/0.0991912))) - 273.15;
-
-	v_in = 3.3*(B1RESULT/4096.0);
-	r_th = -1.0*(R1*R2*v_in)/((-1.0*R2*V5)+(R1*v_in)+(R2*v_in));
-	data_temp.motor_plate_temp_1.F32 = (3380.0)/(log((r_th/0.119286))) - 273.15;
-
-	v_in = 3.3*(A1RESULT/4096.0);
-	r_th = -1.0*(R1*R2*v_in)/((-1.0*R2*V5)+(R1*v_in)+(R2*v_in));
-	data_temp.motor_plate_temp_2.F32 = (3380.0)/(log((r_th/0.119286))) - 273.15;
-
-	v_in = 3.3*(B4RESULT/4096.0);
-	r_th = -1.0*(R1*R2*v_in)/((-1.0*R2*V5)+(R1*v_in)+(R2*v_in));
-	data_temp.ambient_temp.F32 = (3380.0)/(log((r_th/0.119286))) - 273.15;
-
-	data_temp.motor_temp.F32 = (pow((B3RESULT/4096.0),2)*2380.13) + ((B3RESULT/4096.0)*940.533) - 232.125;
-
-	v_in = 3.3*(A7RESULT/4096.0);
-	data_temp.coolant_pressure_1.F32 = (37.5/V5)*(1.56*v_in) - 3.75;
-
-	v_in = 3.3*(A3RESULT/4096.0);
-	data_temp.coolant_pressure_2.F32 = (37.5/V5)*(1.56*v_in) - 3.75;
-
-} */
-
+	//ECanaMboxes.MBOX20.MDH.byte.BYTE4 = percent_out;
 
 	data_temp.gp_button = READGPBUTTON();
 	/*
@@ -266,7 +217,7 @@ void LatchStruct()
 void UpdateStruct()
 {
 	SaveOpStates();
-	user_data = data_temp;
+	//user_data = data_temp;
 	//todo USER: UpdateStruct
 	//update with node specific op changes
 
