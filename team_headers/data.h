@@ -61,7 +61,8 @@ typedef struct USER_DATA
 	canfloat BIM3;
 	canfloat BIM4;
 	canfloat BIM5;
-	canfloat throttle_percent;
+	canfloat throttle_percent_cap;
+	canfloat throttle_percent_ratio;
 	canfloat RPM;
 	canfloat max_cell_temp;
 	canfloat battery_limit;

@@ -32,7 +32,6 @@ user_data_struct data_temp;
 //initializing variables used in SensorCovInit
 int i = 0;
 int THROTTLE_LOOKUP = 0;
-float throttle_ratio = 0;
 int RPM_ratio = 100;
 
 //possible battery cell temperatures
@@ -115,8 +114,9 @@ void SensorCovMeasure()
 	int THROTTLE_LOOKUP = 0;
 	int BIM_STATUS = 0;
 	float MinMax = 0.0;
-	throttle_ratio = (A7RESULT/4096.0) * 100;
+	user_data.throttle_percent_ratio.F32 = (A5RESULT/4096.0);
 	user_data.RPM.F32 = 4000;
+	//user_data.driver_control_limits.U32 = 0x00000000;
 
 	//*******************************************************************************************************
 	//*                                           TODO                                                      *
@@ -145,30 +145,35 @@ void SensorCovMeasure()
 
 	//lookup the corrosponding throttle percentage
 	if (THROTTLE_LOOKUP <= 69){
-		user_data.throttle_percent.F32 = BAT_THROTTLE[0];
-		user_data.throttle_percent.F32 = (float)(user_data.throttle_percent.F32) / 100;
+		user_data.throttle_percent_cap.F32 = BAT_THROTTLE[0];
+		user_data.throttle_percent_cap.F32 = (float)(user_data.throttle_percent_cap.F32) / 100;
 	}
 	else {
 		//lookup corrosponding throttle percentage if the temperature gets too high
-		user_data.throttle_percent.F32 = BAT_THROTTLE[THROTTLE_LOOKUP-69];
-		user_data.throttle_percent.F32 = (float)(user_data.throttle_percent.F32) / 100;
+		user_data.throttle_percent_cap.F32 = BAT_THROTTLE[THROTTLE_LOOKUP-69];
+		user_data.throttle_percent_cap.F32 = (float)(user_data.throttle_percent_cap.F32) / 100;
+	}
+
+	//capping the throttle ratio
+	if (user_data.throttle_percent_ratio.F32 >= user_data.throttle_percent_cap.F32){
+		user_data.throttle_percent_ratio.F32 = user_data.throttle_percent_cap.F32;
 	}
 
 	//Check for limmiting factor (should always result in battery limit being activated)
-	if (throttle_ratio < RPM_ratio) {
-		MinMax = throttle_ratio;
+	if (user_data.throttle_percent_ratio.F32 < RPM_ratio) {
+		MinMax = user_data.throttle_percent_ratio.F32;
 	}
 	else {
 		MinMax = RPM_ratio;
 	}
 
 	// check if battery limmit is the limmiting factor
-	if (((throttle_ratio > 1) && (throttle_ratio < 101)) && (throttle_ratio == MinMax)){
-		user_data.battery_limit.F32 = 1;
+	if (((user_data.throttle_percent_ratio.F32 > .01) && (user_data.throttle_percent_ratio.F32 < 1.01)) && (user_data.throttle_percent_ratio.F32 == MinMax)){
+		user_data.battery_limit.U32 = 1;
 	}
 	//check if rpm is the limmiting factor
-	else if (((throttle_ratio > 1) && (throttle_ratio < 101)) && (RPM_ratio == MinMax)){
-	    user_data.rpm_limit.F32 = 1;
+	else if (((user_data.throttle_percent_ratio.F32 > .01) && (user_data.throttle_percent_ratio.F32 < 1.01)) && (RPM_ratio == MinMax)){
+	    user_data.rpm_limit.U32 = 1;
 	}
 
 	// checking BIM status
@@ -176,17 +181,17 @@ void SensorCovMeasure()
 
 	// activate status limmit if a certain value is reached
 	if (BIM_STATUS == 5){
-		user_data.status_limit.F32 = 1;
+		user_data.status_limit.U32 = 1;
 	}
 
 	//sending the driver control limmits information
-	int limits = 0;
-	limits += user_data.status_limit.U32 << 3;
-	limits += user_data.throttle_lock.U32 << 2;
-	limits += user_data.rpm_limit.U32 << 1;
-	limits += user_data.battery_limit.U32;
 
-	user_data.driver_control_limits.F32 = limits;
+
+	user_data.driver_control_limits.U32 = user_data.status_limit.U32 << 3;
+	user_data.driver_control_limits.U32 += user_data.rpm_limit.U32 << 2;
+	user_data.driver_control_limits.U32 += user_data.battery_limit.U32 << 1;
+	user_data.driver_control_limits.U32 += user_data.throttle_lock.U32;
+
 
 	//int percent_out = 0;
 	//percent_out += user_data.throttle_percent.U32 >> 24;

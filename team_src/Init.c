@@ -77,7 +77,8 @@ void DataSetup()
 	user_data.BIM3.U32 = 0;
 	user_data.BIM4.U32 = 0;
 	user_data.BIM5.U32 = 0;
-	user_data.throttle_percent.U32 = 0;
+	user_data.throttle_percent_cap.U32 = 0;
+	user_data.throttle_percent_ratio.U32 = 0;
 	user_data.RPM.U32 = 0;
 	user_data.max_cell_temp.F32 = 0;
 	user_data.battery_limit.U32 = 0;

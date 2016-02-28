@@ -81,12 +81,14 @@ char FillCAN(unsigned int Mbox)
 	{
 		//todo USER: setup for all transmit MBOXs
 		//InsertCANMessage(int Mbox, unsigned int MDH, unsigned int MDL)
+		Uint32 mdl;
 		switch (Mbox)
 		{
 		case DriverControl_BOX:
-			InsertCANMessage(DriverControl_BOX, 0, user_data.driver_control_limits.U32);
+			mdl = (user_data.max_cell_temp.U32 << 8) + user_data.driver_control_limits.U32;
+			InsertCANMessage(DriverControl_BOX, user_data.max_cell_temp.U32 >> 24, mdl);
 		case DriverThrottle_BOX:
-			InsertCANMessage(DriverThrottle_BOX, user_data.throttle_percent.U32, user_data.RPM.U32);
+			InsertCANMessage(DriverThrottle_BOX, user_data.throttle_percent_ratio.U32, user_data.RPM.U32);
 		default:
 			return 0;
 		}
