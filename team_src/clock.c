@@ -43,11 +43,15 @@ __interrupt void INT14_ISR(void)     // INT14 or CPU-Timer2
 
 	Clock_Ticks.DataOut++;
 
-	if (Clock_Ticks.DataOut >= DATAOUT_TICKS)
+	if (Clock_Ticks.DataOut >= THROTTLE_TICKS)
 	{
 		//send data or fill data
-		SendCAN(DriverControl_BOX);
 		SendCAN(DriverThrottle_BOX);
+		Clock_Ticks.DataOut = 0;
+	}
+	if (Clock_Ticks.DataOut >= STATUS_TICKS)
+	{
+		SendCAN(DriverControl_BOX);
 		Clock_Ticks.DataOut = 0;
 	}
 

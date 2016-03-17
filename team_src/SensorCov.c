@@ -26,22 +26,23 @@ extern DSPfilter B7filter;
 extern DSPfilter GPIO19filter;
 extern DSPfilter GPIO26filter;
 
+
 user_ops_struct ops_temp;
 user_data_struct data_temp;
 
 //initializing variables used in SensorCovInit
 int i = 0;
 int THROTTLE_LOOKUP = 0;
-int RPM_ratio = 100;
 
 //possible battery cell temperatures
-static const int BAT_THROTTLE_TEMP[100] = {-30, -29, -28, -27, -26, -25, -24, -23, -22, -21, -20,
+/*static const int BAT_THROTTLE_TEMP[100] = {-30, -29, -28, -27, -26, -25, -24, -23, -22, -21, -20,
 									-19, -18, -17, -16, -15, -14, -13, -12, -11, -10, -9,
 									-8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6,
 									 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17,18, 19, 20,
 									 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33,
 									 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46,
 									 47,48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60 , 61, 62, 63, 64, 65 ,66, 67 ,68 ,69};
+									 */
 
 //throttle percentages
 static const int BAT_THROTTLE[32] = {100, 97, 94, 91, 88, 85, 82, 79,
@@ -70,10 +71,11 @@ void SensorCov()
 	while (sys_ops.State == STATE_SENSOR_COV)
 	{
 		LatchStruct();
-		SensorCovMeasure();
-		UpdateStruct();
-		FillCANData();
-
+		if (GpioDataRegs.GPADAT.bit.GPIO19 == 1){
+			SensorCovMeasure();
+			UpdateStruct();
+			FillCANData();
+		}
 	}
 	SensorCovDeInit();
 }
@@ -82,24 +84,10 @@ void SensorCovInit()
 {
 	//todo USER: SensorCovInit()
 	SystemSensorInit(SENSOR_COV_STOPWATCH);
-	initDSPfilter(&A0filter, ALPHA_SYS);
-	initDSPfilter(&A1filter, ALPHA_SYS);
-	initDSPfilter(&A2filter, ALPHA_SYS);
-	initDSPfilter(&A3filter, ALPHA_SYS);
-	initDSPfilter(&A4filter, ALPHA_SYS);
+
 	initDSPfilter(&A5filter, ALPHA_SYS);
-	initDSPfilter(&A6filter, ALPHA_SYS);
 	initDSPfilter(&A7filter, ALPHA_SYS);
-	initDSPfilter(&B0filter, ALPHA_SYS);
-	initDSPfilter(&B1filter, ALPHA_SYS);
-	initDSPfilter(&B2filter, ALPHA_SYS);
-	initDSPfilter(&B3filter, ALPHA_SYS);
-	initDSPfilter(&B4filter, ALPHA_SYS);
-	initDSPfilter(&B5filter, ALPHA_SYS);
-	initDSPfilter(&B6filter, ALPHA_SYS);
-	initDSPfilter(&B7filter, ALPHA_SYS);
-	ConfigGPIOSensor(410, 10000, 26, 0, 2);
-	ConfigGPIOSensor(410, 10000, 19, 0, 2);
+
 }
 
 void SensorCovMeasure()
@@ -108,15 +96,14 @@ void SensorCovMeasure()
 #define R2 20000.0
 #define V5 5.08
 #define B 1568.583480 //Ohm
+#define ADC_SCALE 4096.0
 
 	SensorCovSystemInit();
 	//initialize used variables
 	int THROTTLE_LOOKUP = 0;
-	int BIM_STATUS = 0;
 	float MinMax = 0.0;
-	user_data.throttle_percent_ratio.F32 = (A5RESULT/4096.0);
+	user_data.throttle_percent_ratio.F32 = _IQtoF(_IQdiv(_IQ(A5RESULT), _IQ(ADC_SCALE)));
 	user_data.RPM.F32 = 4000;
-	//user_data.driver_control_limits.U32 = 0x00000000;
 
 	//*******************************************************************************************************
 	//*                                           TODO                                                      *
@@ -134,24 +121,18 @@ void SensorCovMeasure()
 		}
 	}
 
-	//loop looks up the maximum temperature value to the closest value in the BATT_THROTTLE_TEMP array
-	for (i = 0; i < 100; i++){
-		if ((user_data.max_cell_temp.F32 < BAT_THROTTLE_TEMP[i+1]) && (user_data.max_cell_temp.F32 >= BAT_THROTTLE_TEMP[i])){
-			//stores this value to look up the coorosponding throttle percentage
-			THROTTLE_LOOKUP = i;
-			break;
-		}
-	}
+	THROTTLE_LOOKUP = (int)user_data.max_cell_temp.F32 + 30;
 
 	//lookup the corrosponding throttle percentage
 	if (THROTTLE_LOOKUP <= 69){
 		user_data.throttle_percent_cap.F32 = BAT_THROTTLE[0];
-		user_data.throttle_percent_cap.F32 = (float)(user_data.throttle_percent_cap.F32) / 100;
+		user_data.throttle_percent_cap.F32 = _IQtoF(_IQmpy(_IQ(user_data.throttle_percent_cap.F32), _IQ(0.01)));
 	}
+
 	else {
 		//lookup corrosponding throttle percentage if the temperature gets too high
 		user_data.throttle_percent_cap.F32 = BAT_THROTTLE[THROTTLE_LOOKUP-69];
-		user_data.throttle_percent_cap.F32 = (float)(user_data.throttle_percent_cap.F32) / 100;
+		user_data.throttle_percent_cap.F32 = _IQtoF(_IQmpy(_IQ(user_data.throttle_percent_cap.F32), _IQ(0.01)));
 	}
 
 	//capping the throttle ratio
@@ -160,29 +141,16 @@ void SensorCovMeasure()
 	}
 
 	//Check for limmiting factor (should always result in battery limit being activated)
-	if (user_data.throttle_percent_ratio.F32 < RPM_ratio) {
+	if (user_data.throttle_percent_ratio.F32) {
 		MinMax = user_data.throttle_percent_ratio.F32;
-	}
-	else {
-		MinMax = RPM_ratio;
 	}
 
 	// check if battery limmit is the limmiting factor
 	if (((user_data.throttle_percent_ratio.F32 > .01) && (user_data.throttle_percent_ratio.F32 < 1.01)) && (user_data.throttle_percent_ratio.F32 == MinMax)){
 		user_data.battery_limit.U32 = 1;
 	}
-	//check if rpm is the limmiting factor
-	else if (((user_data.throttle_percent_ratio.F32 > .01) && (user_data.throttle_percent_ratio.F32 < 1.01)) && (RPM_ratio == MinMax)){
-	    user_data.rpm_limit.U32 = 1;
-	}
 
-	// checking BIM status
-	BIM_STATUS = user_data.BIM1.F32 + user_data.BIM2.F32 + user_data.BIM3.F32 + user_data.BIM4.F32 + user_data.BIM5.F32;
 
-	// activate status limmit if a certain value is reached
-	if (BIM_STATUS == 5){
-		user_data.status_limit.U32 = 1;
-	}
 
 	//sending the driver control limmits information
 
@@ -191,7 +159,6 @@ void SensorCovMeasure()
 	user_data.driver_control_limits.U32 += user_data.rpm_limit.U32 << 2;
 	user_data.driver_control_limits.U32 += user_data.battery_limit.U32 << 1;
 	user_data.driver_control_limits.U32 += user_data.throttle_lock.U32;
-
 
 	//int percent_out = 0;
 	//percent_out += user_data.throttle_percent.U32 >> 24;

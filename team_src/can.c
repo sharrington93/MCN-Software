@@ -6,6 +6,8 @@
  */
 #include "all.h"
 
+#define MTOF_BIT	0x00020000
+
 struct ECAN_REGS ECanaShadow;
 
 /*
@@ -72,6 +74,8 @@ void CANSetup()
     FinishCANInit();
 }
 
+	static Uint32 mailbox_timeouts = 0;
+
 char FillCAN(unsigned int Mbox)
 {
 	CopyMCToShadow(&ECanaShadow);
@@ -116,135 +120,146 @@ __interrupt void ECAN1INTA_ISR(void)  // eCAN-A
   	mailbox_nr = getMailboxNR();
   	//todo USER: Setup ops command
   	//CAN RECEIVE
-  	switch (mailbox_nr)
-  	{
-  	case COMMAND_BOX:
-  		ReadCommand();
-  		break;
-  	case CellTemp1_BOX:
-  		user_data.CellTemp1.U32 = ECanaMboxes.MBOX2.MDL.all;
-  		user_data.CellTemp2.U32 = ECanaMboxes.MBOX2.MDH.all;
-  		ECanaRegs.CANRMP.bit.RMP2 = 1;
-  		break;
-  	case CellTemp2_BOX:
-  	  	user_data.CellTemp3.U32 = ECanaMboxes.MBOX3.MDL.all;
-  	  	user_data.CellTemp4.U32 = ECanaMboxes.MBOX3.MDH.all;
-  	  	ECanaRegs.CANRMP.bit.RMP3 = 1;
-  	  	break;
-  	case CellTemp3_BOX:
-  	  	user_data.CellTemp5.U32 = ECanaMboxes.MBOX4.MDL.all;
-  	  	user_data.CellTemp6.U32 = ECanaMboxes.MBOX4.MDH.all;
-  	  	ECanaRegs.CANRMP.bit.RMP4 = 1;
-  	  	break;
-  	case CellTemp4_BOX:
-  	  	user_data.CellTemp7.U32 = ECanaMboxes.MBOX5.MDL.all;
-  	  	user_data.CellTemp8.U32 = ECanaMboxes.MBOX5.MDH.all;
-		ECanaRegs.CANRMP.bit.RMP5 = 1;
-  	  	break;
-  	case CellTemp5_BOX:
-  	  	user_data.CellTemp9.U32 = ECanaMboxes.MBOX6.MDL.all;
-  	  	user_data.CellTemp10.U32 = ECanaMboxes.MBOX6.MDH.all;
-  	  	ECanaRegs.CANRMP.bit.RMP6 = 1;
-  	  	break;
-  	case CellTemp6_BOX:
-  	  	user_data.CellTemp11.U32 = ECanaMboxes.MBOX7.MDL.all;
-  	  	user_data.CellTemp12.U32 = ECanaMboxes.MBOX7.MDH.all;
-  	  	ECanaRegs.CANRMP.bit.RMP7 = 1;
-  	  	break;
-  	case CellTemp7_BOX:
-  	  	user_data.CellTemp13.U32 = ECanaMboxes.MBOX8.MDL.all;
-  	  	user_data.CellTemp14.U32 = ECanaMboxes.MBOX8.MDH.all;
-  	  	ECanaRegs.CANRMP.bit.RMP8 = 1;
-  	  	break;
-  	case CellTemp8_BOX:
-  	  	user_data.CellTemp15.U32 = ECanaMboxes.MBOX9.MDL.all;
-  	  	user_data.CellTemp16.U32 = ECanaMboxes.MBOX9.MDH.all;
-  	  	ECanaRegs.CANRMP.bit.RMP9 = 1;
-  	  	break;
-  	case CellTemp9_BOX:
-  	  	user_data.CellTemp17.U32 = ECanaMboxes.MBOX10.MDL.all;
-  	  	user_data.CellTemp18.U32 = ECanaMboxes.MBOX10.MDH.all;
-  	  	ECanaRegs.CANRMP.bit.RMP10 = 1;
-  	  	break;
-  	case CellTemp10_BOX:
-  	  	user_data.CellTemp19.U32 = ECanaMboxes.MBOX11.MDL.all;
-  	  	user_data.CellTemp20.U32 = ECanaMboxes.MBOX11.MDH.all;
-  	  	ECanaRegs.CANRMP.bit.RMP11 = 1;
-  	  	break;
-  	case CellTemp11_BOX:
-  	  	user_data.CellTemp21.U32 = ECanaMboxes.MBOX12.MDL.all;
-  	  	user_data.CellTemp22.U32 = ECanaMboxes.MBOX12.MDH.all;
-  	  	ECanaRegs.CANRMP.bit.RMP12 = 1;
-  	  	break;
-  	case CellTemp12_BOX:
-  	  	user_data.CellTemp23.U32 = ECanaMboxes.MBOX13.MDL.all;
-  	  	user_data.CellTemp24.U32 = ECanaMboxes.MBOX13.MDH.all;
-  	  	ECanaRegs.CANRMP.bit.RMP13 = 1;
-  	  	break;
-  	case CellTemp13_BOX:
-  	  	user_data.CellTemp25.U32 = ECanaMboxes.MBOX14.MDL.all;
-  	  	user_data.CellTemp26.U32 = ECanaMboxes.MBOX14.MDH.all;
-  	  	ECanaRegs.CANRMP.bit.RMP14 = 1;
-  	  	break;
-  	case CellTemp14_BOX:
-  	  	user_data.CellTemp27.U32 = ECanaMboxes.MBOX15.MDL.all;
-  	  	user_data.CellTemp28.U32 = ECanaMboxes.MBOX15.MDH.all;
-  	  	ECanaRegs.CANRMP.bit.RMP15 = 1;
-  	  	break;
-  	case CellTemp15_BOX:
-  	  	user_data.CellTemp29.U32 = ECanaMboxes.MBOX16.MDL.all;
-  	  	user_data.CellTemp30.U32 = ECanaMboxes.MBOX16.MDH.all;
-  	  	ECanaRegs.CANRMP.bit.RMP16 = 1;
-  	  	break;
-  	case CellTemp16_BOX:
-  	  	user_data.CellTemp31.U32 = ECanaMboxes.MBOX17.MDL.all;
-  	  	user_data.CellTemp32.U32 = ECanaMboxes.MBOX17.MDH.all;
-  	  	ECanaRegs.CANRMP.bit.RMP17 = 1;
-  	  	break;
-  	case CellTemp17_BOX:
-  	  	user_data.CellTemp33.U32 = ECanaMboxes.MBOX18.MDL.all;
-  	  	user_data.CellTemp34.U32 = ECanaMboxes.MBOX18.MDH.all;
-  	  	ECanaRegs.CANRMP.bit.RMP18 = 1;
-  	  	break;
-  	case CellTemp18_BOX:
-  	  	user_data.CellTemp35.U32 = ECanaMboxes.MBOX19.MDL.all;
-  	  	user_data.CellTemp36.U32 = ECanaMboxes.MBOX19.MDH.all;
-  	  	ECanaRegs.CANRMP.bit.RMP19 = 1;
-  	  	break;
-  	case CellTemp19_BOX:
-  	  	user_data.CellTemp37.U32 = ECanaMboxes.MBOX20.MDL.all;
-  	  	user_data.CellTemp38.U32 = ECanaMboxes.MBOX20.MDH.all;
-  	  	ECanaRegs.CANRMP.bit.RMP20 = 1;
-  	  	break;
-  	case CellTemp20_BOX:
-  	  	user_data.CellTemp39.U32 = ECanaMboxes.MBOX21.MDL.all;
-  	  	user_data.CellTemp40.U32 = ECanaMboxes.MBOX21.MDH.all;
-  	  	ECanaRegs.CANRMP.bit.RMP21 = 1;
-  	  	break;
-  	case RPM_BOX:
-  		user_data.RPM.U32 = ECanaMboxes.MBOX22.MDL.all;
-  	  	ECanaRegs.CANRMP.bit.RMP22 = 1;
-  		break;
-  	case BIM1_BOX:
-  		user_data.BIM1.U32 = ECanaMboxes.MBOX23.MDL.all;
-  	  	ECanaRegs.CANRMP.bit.RMP23 = 1;
-  		break;
-  	case BIM2_BOX:
-  	  	user_data.BIM2.U32 = ECanaMboxes.MBOX24.MDL.all;
-  	  	ECanaRegs.CANRMP.bit.RMP24 = 1;
-  	  	break;
-  	case BIM3_BOX:
-  	  	user_data.BIM3.U32 = ECanaMboxes.MBOX25.MDL.all;
-  	  	ECanaRegs.CANRMP.bit.RMP25 = 1;
-  	  	break;
-  	case BIM4_BOX:
-  	  	user_data.BIM4.U32 = ECanaMboxes.MBOX26.MDL.all;
-  	  	ECanaRegs.CANRMP.bit.RMP26 = 1;
-  	  	break;
-  	case BIM5_BOX:
-  	  	user_data.BIM5.U32 = ECanaMboxes.MBOX27.MDL.all;
-  	  	ECanaRegs.CANRMP.bit.RMP27 = 1;
-  	  	break;
+
+  	if ((ECanaRegs.CANGIF1.all & MTOF_BIT) > 0){
+  	 		// Store which mailboxes timed out.
+  			mailbox_timeouts = ECanaRegs.CANGIF1.all;
+  			// shut down throttle
+  			user_data.throttle_percent_ratio.U32 = 0;
+  	}
+
+  	while (ECanaRegs.CANRMP.all > 0){
+
+		switch (mailbox_nr)
+		{
+		case COMMAND_BOX:
+			ReadCommand();
+			break;
+		case CellTemp1_BOX:
+			user_data.CellTemp1.U32 = ECanaMboxes.MBOX2.MDL.all;
+			user_data.CellTemp2.U32 = ECanaMboxes.MBOX2.MDH.all;
+			ECanaRegs.CANRMP.bit.RMP2 = 1;
+			break;
+		case CellTemp2_BOX:
+			user_data.CellTemp3.U32 = ECanaMboxes.MBOX3.MDL.all;
+			user_data.CellTemp4.U32 = ECanaMboxes.MBOX3.MDH.all;
+			ECanaRegs.CANRMP.bit.RMP3 = 1;
+			break;
+		case CellTemp3_BOX:
+			user_data.CellTemp5.U32 = ECanaMboxes.MBOX4.MDL.all;
+			user_data.CellTemp6.U32 = ECanaMboxes.MBOX4.MDH.all;
+			ECanaRegs.CANRMP.bit.RMP4 = 1;
+			break;
+		case CellTemp4_BOX:
+			user_data.CellTemp7.U32 = ECanaMboxes.MBOX5.MDL.all;
+			user_data.CellTemp8.U32 = ECanaMboxes.MBOX5.MDH.all;
+			ECanaRegs.CANRMP.bit.RMP5 = 1;
+			break;
+		case CellTemp5_BOX:
+			user_data.CellTemp9.U32 = ECanaMboxes.MBOX6.MDL.all;
+			user_data.CellTemp10.U32 = ECanaMboxes.MBOX6.MDH.all;
+			ECanaRegs.CANRMP.bit.RMP6 = 1;
+			break;
+		case CellTemp6_BOX:
+			user_data.CellTemp11.U32 = ECanaMboxes.MBOX7.MDL.all;
+			user_data.CellTemp12.U32 = ECanaMboxes.MBOX7.MDH.all;
+			ECanaRegs.CANRMP.bit.RMP7 = 1;
+			break;
+		case CellTemp7_BOX:
+			user_data.CellTemp13.U32 = ECanaMboxes.MBOX8.MDL.all;
+			user_data.CellTemp14.U32 = ECanaMboxes.MBOX8.MDH.all;
+			ECanaRegs.CANRMP.bit.RMP8 = 1;
+			break;
+		case CellTemp8_BOX:
+			user_data.CellTemp15.U32 = ECanaMboxes.MBOX9.MDL.all;
+			user_data.CellTemp16.U32 = ECanaMboxes.MBOX9.MDH.all;
+			ECanaRegs.CANRMP.bit.RMP9 = 1;
+			break;
+		case CellTemp9_BOX:
+			user_data.CellTemp17.U32 = ECanaMboxes.MBOX10.MDL.all;
+			user_data.CellTemp18.U32 = ECanaMboxes.MBOX10.MDH.all;
+			ECanaRegs.CANRMP.bit.RMP10 = 1;
+			break;
+		case CellTemp10_BOX:
+			user_data.CellTemp19.U32 = ECanaMboxes.MBOX11.MDL.all;
+			user_data.CellTemp20.U32 = ECanaMboxes.MBOX11.MDH.all;
+			ECanaRegs.CANRMP.bit.RMP11 = 1;
+			break;
+		case CellTemp11_BOX:
+			user_data.CellTemp21.U32 = ECanaMboxes.MBOX12.MDL.all;
+			user_data.CellTemp22.U32 = ECanaMboxes.MBOX12.MDH.all;
+			ECanaRegs.CANRMP.bit.RMP12 = 1;
+			break;
+		case CellTemp12_BOX:
+			user_data.CellTemp23.U32 = ECanaMboxes.MBOX13.MDL.all;
+			user_data.CellTemp24.U32 = ECanaMboxes.MBOX13.MDH.all;
+			ECanaRegs.CANRMP.bit.RMP13 = 1;
+			break;
+		case CellTemp13_BOX:
+			user_data.CellTemp25.U32 = ECanaMboxes.MBOX14.MDL.all;
+			user_data.CellTemp26.U32 = ECanaMboxes.MBOX14.MDH.all;
+			ECanaRegs.CANRMP.bit.RMP14 = 1;
+			break;
+		case CellTemp14_BOX:
+			user_data.CellTemp27.U32 = ECanaMboxes.MBOX15.MDL.all;
+			user_data.CellTemp28.U32 = ECanaMboxes.MBOX15.MDH.all;
+			ECanaRegs.CANRMP.bit.RMP15 = 1;
+			break;
+		case CellTemp15_BOX:
+			user_data.CellTemp29.U32 = ECanaMboxes.MBOX16.MDL.all;
+			user_data.CellTemp30.U32 = ECanaMboxes.MBOX16.MDH.all;
+			ECanaRegs.CANRMP.bit.RMP16 = 1;
+			break;
+		case CellTemp16_BOX:
+			user_data.CellTemp31.U32 = ECanaMboxes.MBOX17.MDL.all;
+			user_data.CellTemp32.U32 = ECanaMboxes.MBOX17.MDH.all;
+			ECanaRegs.CANRMP.bit.RMP17 = 1;
+			break;
+		case CellTemp17_BOX:
+			user_data.CellTemp33.U32 = ECanaMboxes.MBOX18.MDL.all;
+			user_data.CellTemp34.U32 = ECanaMboxes.MBOX18.MDH.all;
+			ECanaRegs.CANRMP.bit.RMP18 = 1;
+			break;
+		case CellTemp18_BOX:
+			user_data.CellTemp35.U32 = ECanaMboxes.MBOX19.MDL.all;
+			user_data.CellTemp36.U32 = ECanaMboxes.MBOX19.MDH.all;
+			ECanaRegs.CANRMP.bit.RMP19 = 1;
+			break;
+		case CellTemp19_BOX:
+			user_data.CellTemp37.U32 = ECanaMboxes.MBOX20.MDL.all;
+			user_data.CellTemp38.U32 = ECanaMboxes.MBOX20.MDH.all;
+			ECanaRegs.CANRMP.bit.RMP20 = 1;
+			break;
+		case CellTemp20_BOX:
+			user_data.CellTemp39.U32 = ECanaMboxes.MBOX21.MDL.all;
+			user_data.CellTemp40.U32 = ECanaMboxes.MBOX21.MDH.all;
+			ECanaRegs.CANRMP.bit.RMP21 = 1;
+			break;
+		case RPM_BOX:
+			user_data.RPM.U32 = ECanaMboxes.MBOX22.MDL.all;
+			ECanaRegs.CANRMP.bit.RMP22 = 1;
+			break;
+		case BIM1_BOX:
+			user_data.BIM1.U32 = ECanaMboxes.MBOX23.MDL.all;
+			ECanaRegs.CANRMP.bit.RMP23 = 1;
+			break;
+		case BIM2_BOX:
+			user_data.BIM2.U32 = ECanaMboxes.MBOX24.MDL.all;
+			ECanaRegs.CANRMP.bit.RMP24 = 1;
+			break;
+		case BIM3_BOX:
+			user_data.BIM3.U32 = ECanaMboxes.MBOX25.MDL.all;
+			ECanaRegs.CANRMP.bit.RMP25 = 1;
+			break;
+		case BIM4_BOX:
+			user_data.BIM4.U32 = ECanaMboxes.MBOX26.MDL.all;
+			ECanaRegs.CANRMP.bit.RMP26 = 1;
+			break;
+		case BIM5_BOX:
+			user_data.BIM5.U32 = ECanaMboxes.MBOX27.MDL.all;
+			ECanaRegs.CANRMP.bit.RMP27 = 1;
+			break;
+		}
   	}
   	//todo USER: Setup other reads
 
