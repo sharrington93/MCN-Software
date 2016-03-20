@@ -25,10 +25,13 @@ extern DSPfilter B6filter;
 extern DSPfilter B7filter;
 extern DSPfilter GPIO19filter;
 extern DSPfilter GPIO26filter;
-
+extern clock_struct Clock_Ticks;
 
 user_ops_struct ops_temp;
 user_data_struct data_temp;
+
+static filter throttle_filter;
+
 
 //initializing variables used in SensorCovInit
 int i = 0;
@@ -88,6 +91,7 @@ void SensorCovInit()
 	initDSPfilter(&A5filter, ALPHA_SYS);
 	initDSPfilter(&A7filter, ALPHA_SYS);
 
+	EMA_Filter_Init(&throttle_filter, 1000, 0.7);
 }
 
 void SensorCovMeasure()
@@ -100,6 +104,9 @@ void SensorCovMeasure()
 
 	SensorCovSystemInit();
 	//initialize used variables
+
+	EMA_Filter_LastOutput(&throttle_filter, user_data.throttle_percent_ratio.F32);
+
 	int THROTTLE_LOOKUP = 0;
 	float MinMax = 0.0;
 	user_data.throttle_percent_ratio.F32 = _IQtoF(_IQdiv(_IQ(A5RESULT), _IQ(ADC_SCALE)));
@@ -131,13 +138,29 @@ void SensorCovMeasure()
 
 	else {
 		//lookup corrosponding throttle percentage if the temperature gets too high
-		user_data.throttle_percent_cap.F32 = BAT_THROTTLE[THROTTLE_LOOKUP-69];
-		user_data.throttle_percent_cap.F32 = _IQtoF(_IQmpy(_IQ(user_data.throttle_percent_cap.F32), _IQ(0.01)));
+		if (THROTTLE_LOOKUP > 99){
+			user_data.throttle_percent_cap.F32 = 0;
+		}
+		else {
+			user_data.throttle_percent_cap.F32 = BAT_THROTTLE[THROTTLE_LOOKUP-69];
+			user_data.throttle_percent_cap.F32 = _IQtoF(_IQmpy(_IQ(user_data.throttle_percent_cap.F32), _IQ(0.01)));
+		}
 	}
 
-	//capping the throttle ratio
-	if (user_data.throttle_percent_ratio.F32 >= user_data.throttle_percent_cap.F32){
-		user_data.throttle_percent_ratio.F32 = user_data.throttle_percent_cap.F32;
+	EMA_Filter_NewInput(&throttle_filter, user_data.throttle_percent_ratio.F32);
+	if (Clock_Ticks.filter >= FILTER_TICKS){
+		user_data.throttle_output.F32 = EMA_Filter_GetFilteredOutput(&throttle_filter);
+		Clock_Ticks.filter = 0;
+	}
+    //capping the throttle ratio
+	if (user_data.throttle_output.F32 >= user_data.throttle_percent_cap.F32){
+		user_data.throttle_output.F32 = user_data.throttle_percent_cap.F32;
+	}
+
+	user_data.no_filter.F32 = user_data.throttle_percent_ratio.F32;
+
+	if (user_data.no_filter.F32 >= user_data.throttle_percent_cap.F32){
+		user_data.no_filter.F32 = user_data.throttle_percent_cap.F32;
 	}
 
 	//Check for limmiting factor (should always result in battery limit being activated)

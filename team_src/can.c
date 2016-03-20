@@ -9,7 +9,6 @@
 #define MTOF_BIT	0x00020000
 
 struct ECAN_REGS ECanaShadow;
-
 /*
  * Function responsible for initializing the CAN module.
  *
@@ -67,7 +66,7 @@ void CANSetup()
 	CreateCANMailbox(BIM5_BOX, 0, 0 , 0, 8, BIM5_ID, 1);
 	CreateCANMailbox(DriverControl_BOX, 0, 0, 0, 8, DriverControl_ID, 0);
 	CreateCANMailbox(DriverThrottle_BOX, 0, 0, 0, 8, DriverThrottle_ID, 0);
-
+	CreateCANMailbox(no_filter_BOX, 0, 0, 0, 8, no_filter_ID, 0);
 
 
     EDIS;
@@ -91,8 +90,13 @@ char FillCAN(unsigned int Mbox)
 		case DriverControl_BOX:
 			mdl = (user_data.max_cell_temp.U32 << 8) + user_data.driver_control_limits.U32;
 			InsertCANMessage(DriverControl_BOX, user_data.max_cell_temp.U32 >> 24, mdl);
+			break;
 		case DriverThrottle_BOX:
-			InsertCANMessage(DriverThrottle_BOX, user_data.throttle_percent_ratio.U32, user_data.RPM.U32);
+			InsertCANMessage(DriverThrottle_BOX, user_data.throttle_output.U32, user_data.RPM.U32);
+			break;
+		case no_filter_BOX:
+			InsertCANMessage(no_filter_BOX, 0, user_data.no_filter.U32);
+			break;
 		default:
 			return 0;
 		}
@@ -101,6 +105,7 @@ char FillCAN(unsigned int Mbox)
 	{
 		return 1;
 	}
+	return 0;
 }
 
 void FillCANData()
@@ -108,6 +113,7 @@ void FillCANData()
 	//todo USER: use FillCAN to put data into correct mailboxes
 	FillCAN(DriverControl_BOX);
 	FillCAN(DriverThrottle_BOX);
+	FillCAN(no_filter_BOX);
 	FillCAN(RPM_BOX);
 }
 

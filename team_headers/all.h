@@ -35,6 +35,7 @@
 #include "DSP2803x_GlobalPrototypes.h"
 #include "Flash2803x_API_Library.h"
 #include "IQmathLib.h"
+#include "EMA.h"
 
 
 extern sys_ops_struct sys_ops;

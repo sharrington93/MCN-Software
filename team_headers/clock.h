@@ -15,6 +15,7 @@ void ClockSetup();
 
 #define THROTTLE_TICKS		2	//20hz
 #define STATUS_TICKS 		40	//1hz
+#define FILTER_TICKS		1
 
 //todo USER: CLOCK_TICKS_CLEAR should have the same number of zeros as clock_struct has elements (as seen below)
 //#define CLOCK_TICKS_CLEAR {0,0}
@@ -22,7 +23,10 @@ void ClockSetup();
 
 typedef struct CLOCK_TICKS
 {
-	int DataOut;
+	int DataOutThrottle;
+	int DataOutLimits;
+	Uint32 filter;
+
 }clock_struct;
 
 
