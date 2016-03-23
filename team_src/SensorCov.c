@@ -91,7 +91,7 @@ void SensorCovInit()
 	initDSPfilter(&A5filter, ALPHA_SYS);
 	initDSPfilter(&A7filter, ALPHA_SYS);
 
-	EMA_Filter_Init(&throttle_filter, 1000, 0.7);
+	EMA_Filter_Init(&throttle_filter, 1000);
 }
 
 void SensorCovMeasure()
@@ -104,8 +104,6 @@ void SensorCovMeasure()
 
 	SensorCovSystemInit();
 	//initialize used variables
-
-	EMA_Filter_LastOutput(&throttle_filter, user_data.throttle_percent_ratio.F32);
 
 	int THROTTLE_LOOKUP = 0;
 	float MinMax = 0.0;
@@ -148,10 +146,8 @@ void SensorCovMeasure()
 	}
 
 	EMA_Filter_NewInput(&throttle_filter, user_data.throttle_percent_ratio.F32);
-	if (Clock_Ticks.filter >= FILTER_TICKS){
-		user_data.throttle_output.F32 = EMA_Filter_GetFilteredOutput(&throttle_filter);
-		Clock_Ticks.filter = 0;
-	}
+	user_data.throttle_output.F32 = EMA_Filter_GetFilteredOutput(&throttle_filter);
+
     //capping the throttle ratio
 	if (user_data.throttle_output.F32 >= user_data.throttle_percent_cap.F32){
 		user_data.throttle_output.F32 = user_data.throttle_percent_cap.F32;

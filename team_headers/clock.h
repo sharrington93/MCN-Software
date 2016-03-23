@@ -25,8 +25,6 @@ typedef struct CLOCK_TICKS
 {
 	int DataOutThrottle;
 	int DataOutLimits;
-	Uint32 filter;
-
 }clock_struct;
 
 

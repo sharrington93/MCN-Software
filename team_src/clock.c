@@ -43,7 +43,6 @@ __interrupt void INT14_ISR(void)     // INT14 or CPU-Timer2
 
 	Clock_Ticks.DataOutThrottle++;
 	Clock_Ticks.DataOutLimits++;
-	Clock_Ticks.filter++;
 
 	if (Clock_Ticks.DataOutThrottle >= THROTTLE_TICKS)
 	{
@@ -57,6 +56,8 @@ __interrupt void INT14_ISR(void)     // INT14 or CPU-Timer2
 		SendCAN(DriverControl_BOX);
 		Clock_Ticks.DataOutLimits = 0;
 	}
+
+	EMA_Filter_Update();
 
 	RestartCpuTimer2();
 	DINT;

@@ -8,22 +8,21 @@
 #ifndef EMA_FILTER
 #define EMA_FILTER
 
-typedef struct {
+typedef struct filter filter;
 
-	float _lastOutput;
-	float _input;
+struct filter
+{
+	_iq _input;
 	Uint16 _sampleRate;
-	float _alpha;
-	float _filteredOutput;
-	struct filter *_nextFilter;
+	Uint32 _lastSampleTime;
+	_iq _alpha;
+	_iq _filteredOutput;
+	filter *_nextFilter;
+};
 
-} filter;
+void EMA_Filter_Init(filter *f, Uint16 sampleRate);
 
-
-
-void EMA_Filter_Init(filter *f, Uint16 sampleRate, float alpha);
-
-float EMA_Filter_LastOutput(filter *f, float lastOutput);
+void EMA_Filter_Update(void);
 
 float EMA_Filter_NewInput(filter *f, float input);
 
